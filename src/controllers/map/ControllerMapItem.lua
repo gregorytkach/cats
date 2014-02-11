@@ -53,7 +53,7 @@ function ControllerMapItem.init(self, params)
     
     if(self._isCurrent)then
         --todo: implement animation
-    elseif(not self._entry:isComplete())then
+    elseif(not self._entry:progress():isComplete())then
         self._view:button():setIsEnabled(false)
     end
 end

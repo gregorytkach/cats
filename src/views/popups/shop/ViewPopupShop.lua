@@ -26,8 +26,6 @@ end
 --
 -- Methods
 --
-
-
 function ViewPopupShop.init(self, params)
     
     ViewPopupCatsBase.init(self, params)
