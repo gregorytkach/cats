@@ -17,9 +17,11 @@ function ManagerResources.init(self)
     --state map
     
     self._resources[EResourceType.ERT_STATE_MAP_VIEW_STARS]                 = "%sstate_map/ui/view_stars/view_stars%s.png"
+    
     self._resources[EResourceType.ERT_STATE_MAP_VIEW_ENERGY]                = "%sstate_map/ui/view_energy/view_energy%s.png"
     
     self._resources[EResourceType.ERT_STATE_MAP_BUTTON_ITEM]                = '%sstate_map/button_level/%s%s.png'
+    self._resources[EResourceType.ERT_STATE_MAP_ICON_STAR]                  = '%sstate_map/button_level/icon_star/icon_star%s.png'
     
     self._resources[EResourceType.ERT_STATE_MAP_BUTTON_FREE_ENERGY]         = "%sstate_map/ui/view_free/button/%s%s.png"
     self._resources[EResourceType.ERT_STATE_MAP_BUTTON_SHOP]                = "%sstate_map/ui/button_shop/%s%s.png"

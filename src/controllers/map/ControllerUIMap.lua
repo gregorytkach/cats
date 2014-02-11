@@ -16,6 +16,19 @@ function ControllerUIMap.onViewClicked(self, target, event)
     
     if(not result)then
         
+        if(target == self._view:buttonShop())then
+            
+            local popupShop = self._currentState:getPopup(EPopupType.EPT_SHOP)
+            
+            popupShop:showPurchase()
+            
+            self._currentState:showPopup(EPopupType.EPT_SHOP)
+            
+        else
+            assert(false)
+        end
+        
+        
     end
     
     return result
@@ -38,6 +51,8 @@ function ControllerUIMap.init(self)
     
     self._controllerEnergy = ControllerEnergy:new()
     self._view:setViewEnergy(self._controllerEnergy:view())
+    
+    self._currentState =  GameInfo:instance():managerStates():currentState()
 end
 
 function ControllerUIMap.update(self, updateType)
@@ -52,8 +67,13 @@ function ControllerUIMap.update(self, updateType)
 end
 
 function ControllerUIMap.cleanup(self)
+    self._currentState = nil
+    
     self._view:cleanup()
     self._view = nil
+    
+    self._controllerEnergy:cleanup()
+    self._controllerEnergy = nil
     
     Controller.cleanup(self)
 end
