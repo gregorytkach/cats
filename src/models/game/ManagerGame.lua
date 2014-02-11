@@ -317,7 +317,9 @@ function ManagerGame.push(self)
 
     else
 
-		self:foundCanMakeCombination()
+        if not self:foundCanMakeCombination() then
+            print('need shuffle!')
+        end
 
         timer.cancel(self._timerPush)
         self._timerPush = nil
@@ -471,15 +473,14 @@ function ManagerGame.tryChangeTo(self, catTo)
 
     local catFrom = self._focusCat
 
-	local rowFrom       = catFrom:row()
+    local rowFrom       = catFrom:row()
     local columnFrom    = catFrom:column()
 
     local rowTo         = catTo:row()
     local columnTo      = catTo:column()
 
 
-
-    if self:canMakeCombination(catFrom, catTo) then
+    if self:canMakeCombination(catFrom, catTo) or self:canMakeCombination(catTo, catFrom) then
 
         catFrom:setPosition(rowTo, columnTo)
         catTo:setPosition(rowFrom, columnFrom)
@@ -550,12 +551,12 @@ end
 
 function ManagerGame.canMakeCombination(self, catFrom, catTo)
 
-	assert(catFrom ~= nil)
-	assert(catTo ~= nil)
+    assert(catFrom ~= nil)
+    assert(catTo ~= nil)
 
-	local result
+    local result
 
-	local rowFrom       = catFrom:row()
+    local rowFrom       = catFrom:row()
     local columnFrom    = catFrom:column()
 
     local rowTo         = catTo:row()
@@ -564,21 +565,20 @@ function ManagerGame.canMakeCombination(self, catFrom, catTo)
     self._cats[rowTo][columnTo]     = catFrom
     self._cats[rowFrom][columnFrom] = catTo
 
-
     local foundCombinationRow    = self:foundChain(catFrom:type(), 'row',      rowTo ,     3)
     local foundCombinationColumn = self:foundChain(catFrom:type(), 'column',   columnTo,  3)
 
     local isCombinationFoundHorizontal = table.indexOf(foundCombinationRow, catFrom) ~= nil
     local isCombinationFoundVertical   = table.indexOf(foundCombinationColumn, catFrom) ~= nil
 
-	result = isCombinationFoundHorizontal or isCombinationFoundVertical
+    result = isCombinationFoundHorizontal or isCombinationFoundVertical
 
-	if not result then
+    if not result then
 
-		self._cats[rowTo][columnTo]     = catTo
+        self._cats[rowTo][columnTo]     = catTo
         self._cats[rowFrom][columnFrom] = catFrom
 
-	end
+    end
 
     return result
 
@@ -597,44 +597,40 @@ function ManagerGame.foundCanMakeCombination(self)
             local catDown = self._cats[rowIndex + 1][columnIndex]
             local catRight = self._cats[rowIndex][columnIndex + 1]
 
-            local row           = cat:row()
-            local columnFrom    = cat:column()
 
             if cat:type() ~= catDown:type() then
 
                 result = self:canMakeCombination(cat, catDown)
 
                 if not result then
-					result = self:canMakeCombination(catDown, cat)
+                    
+                    result = self:canMakeCombination(catDown, cat)
 
                 end
 
             end
 
-			if cat:type() ~= catRight:type() and not result then
+             if cat:type() ~= catRight:type() and not result then
 
+                    result = self:canMakeCombination(cat, catRight)
 
-                result = self:canMakeCombination(cat, catRight)
+                    if not result then
 
+                        result = self:canMakeCombination(catRight, cat)
 
-                if not result then
-					result = self:canMakeCombination(catRight, cat)
-
-                end
-
+                    end
 
             end
 
-			if result then
+            if result then
 
-				self._cats[rowIndex][columnIndex] = cat
-				self._cats[rowIndex + 1][columnIndex] = catDown
-				self._cats[rowIndex][columnIndex + 1] = catRight
+                    self._cats[rowIndex][columnIndex] = cat
+                    self._cats[rowIndex + 1][columnIndex] = catDown
+                    self._cats[rowIndex][columnIndex + 1] = catRight
 
-				print('find_combination'..rowIndex..' '..columnIndex)
-				break
+                    break
 
-			end
+            end
 
         end
 
