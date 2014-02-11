@@ -46,7 +46,13 @@ EResourceType =
     
     ["ERT_POPUP_SHOP_BUTTON_TAB"]               = "ERT_POPUP_SHOP_BUTTON_TAB";
     ["ERT_POPUP_SHOP_VIEW_ITEM"]                = "ERT_POPUP_SHOP_VIEW_ITEM";
+    ["ERT_POPUP_SHOP_VIEW_CONTENT"]             = "ERT_POPUP_SHOP_VIEW_CONTENT";
+    ["ERT_POPUP_SHOP_BUTTON_BUY"]               = "ERT_POPUP_SHOP_BUTTON_BUY";
+    
     ["ERT_ICON_ENERGY"]                         = "ERT_ICON_ENERGY";
+    ["ERT_ICON_REMOVE_9_CELLS"]                 = "ERT_ICON_REMOVE_9_CELLS";
+    ["ERT_ICON_REMOVE_BOTTOM_ROW"]              = "ERT_ICON_REMOVE_BOTTOM_ROW";
+    ["ERT_ICON_SHUFFLE"]                        = "ERT_ICON_SHUFFLE";
     
 }
 

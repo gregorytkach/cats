@@ -35,7 +35,6 @@ function ViewPopupShop.init(self, params)
     
     self:initBackground(managerResources:getPopupBackground(self._controller:getType()))
     self:initTitle(EStringType.EST_POPUP_SHOP_TITLE)
-    
    
     local buttonClose = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_BLUE), 
     nil, 

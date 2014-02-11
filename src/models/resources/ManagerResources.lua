@@ -52,9 +52,15 @@ function ManagerResources.init(self)
     
     --popup shop
    self._resources[EResourceType.ERT_POPUP_SHOP_BUTTON_TAB]                 = '%spopup_shop/button_tab/%s%s.png'
-   self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_ITEM]                  = '%spopup_shop/content/view_item/view_item%s.png'
-   self._resources[EResourceType.ERT_ICON_ENERGY]                           = '%spopup_shop/content/energy/view_energy%s.png'
+   self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_ITEM]                  = '%spopup_shop/view_item/view_item%s.png'
+   self._resources[EResourceType.ERT_ICON_ENERGY]                           = '%spopup_shop/content/energy/energy%s.png'
+   self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_CONTENT]               = '%spopup_shop/view_content/view_content%s.png'
+   self._resources[EResourceType.ERT_ICON_REMOVE_9_CELLS]                   = '%spopup_shop/content/energy/remove_9_cells%s.png'
+   self._resources[EResourceType.ERT_ICON_REMOVE_BOTTOM_ROW]                = '%spopup_shop/content/remove_bottom_row/remove_bottom_row%s.png'
+    self._resources[EResourceType.ERT_ICON_SHUFFLE]                         = '%spopup_shop/content/shuffle/ico_bonus_3%s.png'
     
+   self._resources[EResourceType.ERT_POPUP_SHOP_BUTTON_BUY]                 = "%spopup_shop/button_buy/%s%s.png"
+   
 end
 
 --
