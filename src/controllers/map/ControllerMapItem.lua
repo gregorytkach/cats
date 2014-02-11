@@ -36,10 +36,19 @@ function ControllerMapItem.init(self, params)
     assert(params.isCurrent     ~= nil)
     
     self._isCurrent = params.isCurrent
+    self._entry = params.entry
+    
+    local starsCount = 0
+    
+    if(self._isCurrent or self._entry:progress():isComplete())then
+        starsCount = self._entry:progress():starsCount()
+    end
+    
     
     local paramsView = 
     {
-        controller = self
+        controller  = self,
+        stars_count = starsCount
     }
     
     local paramsController = 
@@ -49,13 +58,12 @@ function ControllerMapItem.init(self, params)
     
     Controller.init(self, paramsController)
     
-    self._entry = params.entry
-    
     if(self._isCurrent)then
         --todo: implement animation
     elseif(not self._entry:progress():isComplete())then
         self._view:button():setIsEnabled(false)
     end
+    
 end
 
 function ControllerMapItem.update(self, updateType)

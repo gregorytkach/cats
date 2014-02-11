@@ -195,7 +195,7 @@ function getLevel0Data(isComplete)
         progress =
         {
             is_complete      = isComplete,
-            stars_count      = 0,
+            stars_count      = 3,
         }
     }
     

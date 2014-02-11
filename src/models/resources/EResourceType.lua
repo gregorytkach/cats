@@ -32,6 +32,8 @@ EResourceType =
     ["ERT_STATE_MAP_VIEW_STARS"]                = "ERT_STATE_MAP_VIEW_STARS";
     
     ["ERT_STATE_MAP_BUTTON_ITEM"]               = "ERT_STATE_MAP_BUTTON_ITEM";
+    ["ERT_STATE_MAP_ICON_STAR"]                 = "ERT_STATE_MAP_ICON_STAR";
+    
     ["ERT_STATE_MAP_BUTTON_BARRIER"]            = "ERT_STATE_MAP_BUTTON_BARRIER";
     
     ["ERT_STATE_MAP_BUTTON_SHOP"]               = "ERT_STATE_MAP_BUTTON_SHOP";
