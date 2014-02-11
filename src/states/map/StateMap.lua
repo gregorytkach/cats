@@ -40,6 +40,13 @@ function StateMap.initLayerUI(self)
     
 end
 
+function StateMap.initLayerPopups(self)
+    StateBase.initLayerPopups(self)
+    
+    self:registerPopup(ControllerPopupShop:new())
+    
+end
+
 function StateMap.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then

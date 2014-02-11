@@ -1,9 +1,5 @@
 require('game_cats.src.controllers.game.ControllerStateGame')
 require('game_cats.src.controllers.game.ControllerUI')
-require('game_cats.src.controllers.popups.game_over.ControllerPopupGameOver')
-require('game_cats.src.controllers.popups.win.ControllerPopupWin')
-require('game_cats.src.controllers.popups.pause.ControllerPopupPause')
-require('game_cats.src.controllers.popups.shop.ControllerPopupShop')
 
 StateGame = classWithSuper(StateBase, 'StateGame')
 
@@ -69,11 +65,10 @@ end
 function StateGame.initLayerPopups(self)
     StateBase.initLayerPopups(self)
     
---    self:registerPopup(ControllerPopupShop:new())
+    self:registerPopup(ControllerPopupShop:new())
     self:registerPopup(ControllerPopupWin:new())
     self:registerPopup(ControllerPopupGameOver:new())
     self:registerPopup(ControllerPopupPause:new())
-    self:registerPopup(ControllerPopupShop:new())
     
 end
 

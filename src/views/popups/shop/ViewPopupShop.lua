@@ -98,14 +98,11 @@ end
 
 function ViewPopupShop.cleanup(self)
     
-    self._buttonClose:cleanup()
-    self._buttonClose = nil
-    
     self._buttonEnergy:cleanup()
     self._buttonEnergy = nil
     
-    self._buttonBonuses:cleanup()
-    self._buttonBonuses = nil
+    self._buttonPurchase:cleanup()
+    self._buttonPurchase = nil
     
     ViewPopupCatsBase.cleanup(self)
     

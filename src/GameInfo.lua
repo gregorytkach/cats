@@ -17,6 +17,10 @@ require("game_cats.src.models.sounds.ManagerSounds")
 require('game_cats.src.models.string.ManagerString')
 require('game_cats.src.models.game.ManagerGame')
 
+require('game_cats.src.controllers.popups.game_over.ControllerPopupGameOver')
+require('game_cats.src.controllers.popups.win.ControllerPopupWin')
+require('game_cats.src.controllers.popups.pause.ControllerPopupPause')
+require('game_cats.src.controllers.popups.shop.ControllerPopupShop')
 
 
 GameInfo = classWithSuper(GameInfoBase, 'GameInfo') 
