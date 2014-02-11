@@ -1,3 +1,5 @@
+require('game_cats.src.models.levels.LevelProgress')
+
 LevelInfo = classWithSuper(LevelInfoBase, 'LevelInfo')
 
 --
@@ -14,10 +16,6 @@ end
 
 function LevelInfo.turnsLimit(self)
     return self._turnsLimit
-end
-
-function LevelInfo.starsCount(self)
-    return self._starsCount
 end
 
 function LevelInfo.starPoints1(self)
@@ -49,7 +47,6 @@ function LevelInfo.deserialize(self, data)
     
     assert(data.turns_limit     ~= nil)
     
-    assert(data.stars_count     ~= nil)
     assert(data.star_points_1   ~= nil)
     assert(data.star_points_2   ~= nil)
     assert(data.star_points_3   ~= nil)
@@ -58,12 +55,15 @@ function LevelInfo.deserialize(self, data)
     self._columns       = data.columns
     
     self._turnsLimit    = data.turns_limit
-    
-    self._starsCount    = data.stars_count
-    
+        
     self._starPoints1   = data.star_points_1
     self._starPoints2   = data.star_points_2
     self._starPoints3   = data.star_points_3
     
+end
+
+function LevelInfo.initLevelProgress(self, data)
+    self._progress = LevelProgress:new()
+    self._progress:deserialize(data)
 end
 
