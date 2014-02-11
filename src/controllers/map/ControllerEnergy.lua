@@ -13,6 +13,18 @@ function ControllerEnergy.onViewClicked(self, target, event)
     
     if(not result)then
         
+        if(target == self._view:buttonBuy())then
+            
+            local popupShop = self._currentState:getPopup(EPopupType.EPT_SHOP)
+            
+            popupShop:showEnergy()
+            
+            self._currentState:showPopup(EPopupType.EPT_SHOP)
+            
+        else
+            assert(false)
+        end
+        
     end
     
     return result
@@ -33,6 +45,8 @@ function ControllerEnergy.init(self)
     }
     
     Controller.init(self, paramsController)
+    
+    self._currentState =  GameInfo:instance():managerStates():currentState()
 end
 
 function ControllerEnergy.update(self, updateType)
@@ -46,6 +60,9 @@ function ControllerEnergy.update(self, updateType)
 end
 
 function ControllerEnergy.cleanup(self)
+    
+    self._currentState = nil
+    
     self._view:cleanup()
     self._view = nil
     
