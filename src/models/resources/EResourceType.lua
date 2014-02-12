@@ -13,6 +13,7 @@ EResourceType =
     ["ERT_STATE_GAME_VIEW_CELL_DEFAULT_1"]      = "ERT_STATE_GAME_VIEW_CELL_DEFAULT_1";
     ["ERT_STATE_GAME_VIEW_TURNS"]               = "ERT_STATE_GAME_VIEW_TURNS";
     ["ERT_STATE_GAME_BUTTON_PAUSE"]             = "ERT_STATE_GAME_BUTTON_PAUSE";
+    ["ERT_STATE_GAME_BUTTON_BUY"]               = "ERT_STATE_GAME_BUTTON_BUY";
     
     --purchases
     

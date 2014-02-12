@@ -29,13 +29,6 @@ function ViewPopupShopItem.init(self, params)
     
     self._viewItem      = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_SHOP_VIEW_ITEM))
     self._sourceView:insert(self._viewItem:sourceView())
-    
-   
-    
---    self._labelContentCount     = self:createLabel(params.entry:contentCount(), EFontType.EFT_0)
-
---    
---    self._labelPrice            = self:createLabel(params.entry:priceHard(), EFontType.EFT_2)
    
     
     local iconImage = nil
@@ -60,33 +53,33 @@ function ViewPopupShopItem.init(self, params)
         iconImage = managerResources:getAsImage(EResourceType.ERT_ICON_SHUFFLE)
         self._iconShuffle        = self:createSprite(iconImage) 
         
-        --todo: rewrite '3.99'
+        --todo: rewrite '1'
+        
+        self._labelContentCountRemove9Cells = self:createLabel('1', EFontType.EFT_0)
+        
+        self._labelContentCountRemoveBottomRow = self:createLabel('1', EFontType.EFT_0)
+        
+        self._labelContentCountShuffle = self:createLabel('1', EFontType.EFT_0)
+        
         
         self._labelContentPrice     = self:createLabel('1$', EFontType.EFT_0)
-        self._sourceView:insert(self._labelContentPrice:sourceView())
         
         self._labelContentPlus1     = self:createLabel('+', EFontType.EFT_0)
-        self._sourceView:insert(self._labelContentPlus1:sourceView())
         
         self._labelContentPlus2     = self:createLabel('+', EFontType.EFT_0)
-        self._sourceView:insert(self._labelContentPlus2:sourceView())
         
     elseif(params.entry:type() == EPurchaseTypeBase.EPT_ENERGY)then
         
         self._viewContent      = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_SHOP_VIEW_CONTENT))
-        self._sourceView:insert(self._viewContent:sourceView())
         
         iconImage = managerResources:getAsImage(EResourceType.ERT_ICON_ENERGY)
         self._icon        = self:createSprite(iconImage) 
-        self._sourceView:insert(self._icon:sourceView())
         
         self._labelContentCount     = self:createLabel(params.entry:contentCount(), EFontType.EFT_0)
-        self._sourceView:insert(self._labelContentCount:sourceView())
         
         --todo: rewrite '3.99'
         
         self._labelContentPrice     = self:createLabel('3.99', EFontType.EFT_0)
-        self._sourceView:insert(self._labelContentPrice:sourceView())
         
     else
         assert(false)
@@ -98,14 +91,8 @@ end
 
 function ViewPopupShopItem.placeViews(self)
     
-    
-    
+   
     self._viewItem:sourceView().x  = 35 -  self._viewItem:realWidth() / 2
-    
-    
---    
---    self._labelContentCount:sourceView().x  = self._viewItem:sourceView().x - (viewItemRealWidth / 2) + viewItemRealWidth * 0.2
---    self._labelPrice:sourceView().x         = self._viewItem:sourceView().x + (viewItemRealWidth / 2) - viewItemRealWidth * 0.2
     
     
     self._buttonBuy:sourceView().x = 40 + self._buttonBuy:realWidth() / 2 
@@ -117,13 +104,13 @@ function ViewPopupShopItem.placeViews(self)
         
         self._labelContentCount:sourceView().x = self._icon:sourceView().x - self._icon:realWidth() - self._labelContentCount:realWidth() / 2
         self._labelContentPrice:sourceView().x = self._icon:sourceView().x + self._icon:realWidth() + self._labelContentPrice:realWidth() / 2
+        
     else
+        
         local offsetContentX = -20
         
         self._viewContentRemove9Cells:sourceView().x = self._viewItem:sourceView().x - self._viewItem:realWidth() * 0.25 + offsetContentX 
-        
         self._viewContentRemoveBottomRow:sourceView().x = self._viewItem:sourceView().x  + offsetContentX 
-         
         self._viewContentShuffle:sourceView().x = self._viewItem:sourceView().x + self._viewItem:realWidth() * 0.25 + offsetContentX 
         
         self._iconRemove9Cells:sourceView().x = self._viewContentRemove9Cells:sourceView().x - self._viewContentRemove9Cells:realWidth() * 0.3
@@ -135,18 +122,24 @@ function ViewPopupShopItem.placeViews(self)
         self._iconShuffle:sourceView().x = self._viewContentShuffle:sourceView().x - self._viewContentShuffle:realWidth() * 0.3
         self._iconShuffle:sourceView().y = self._viewContentShuffle:sourceView().y - self._viewContentShuffle:realHeight() * 0.3
         
+        self._labelContentCountRemove9Cells:sourceView().x = self._viewContentRemove9Cells:sourceView().x
+        self._labelContentCountRemoveBottomRow:sourceView().x = self._viewContentRemoveBottomRow:sourceView().x
+        self._labelContentCountShuffle:sourceView().x = self._viewContentShuffle:sourceView().x
+        
         self._labelContentPrice:sourceView().x = self._viewItem:sourceView().x + self._viewItem:realWidth() * 0.5 - self._labelContentPrice:realWidth() +  offsetContentX
+        
+        self._labelContentPlus1:sourceView().x = (self._viewContentRemove9Cells:sourceView().x + self._viewContentRemoveBottomRow:sourceView().x) / 2
+        self._labelContentPlus2:sourceView().x = (self._viewContentShuffle:sourceView().x + self._viewContentRemoveBottomRow:sourceView().x) / 2
         
     end
     
     ViewBase.placeViews(self)
+    
 end
 
 function ViewPopupShopItem.cleanup(self)
     
---    self._labelContentCount:cleanup()
---    self._labelContentCount = nil
---    
+  
     self._viewItem:cleanup()
     self._viewItem = nil
     
@@ -163,7 +156,6 @@ function ViewPopupShopItem.cleanup(self)
         
         self._labelContentCount:cleanup()
         self._labelContentCount = nil
-        
         
     else
         
@@ -188,18 +180,16 @@ function ViewPopupShopItem.cleanup(self)
         self._labelContentPlus1:cleanup()
         self._labelContentPlus1 = nil
         
+        self._labelContentPlus2:cleanup()
+        self._labelContentPlus2 = nil
+        
     end
     
     self._labelContentPrice:cleanup()
     self._labelContentPrice = nil
     
---    self._icon:cleanup()
---    self._icon = nil
---    
---    self._labelPrice:cleanup()
---    self._labelPrice = nil
-    
     ViewBase.cleanup(self)
+    
 end
 
 

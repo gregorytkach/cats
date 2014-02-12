@@ -35,6 +35,7 @@ function ManagerResources.init(self)
     
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_PAUSE]              = "%sstate_game/ui/button_pause/%s%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_TURNS]                = "%sstate_game/ui/view_turns/view_turns%s.png"
+    self._resources[EResourceType.ERT_STATE_GAME_BUTTON_BUY]                = ""
     
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_REMOVE_9_CELLS]     = "%sstate_game/ui/view_purchases/button_remove_9_cells/%s%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_REMOVE_BOTTOM_ROW]  = "%sstate_game/ui/view_purchases/button_remove_bottom_row/%s%s.png"
@@ -54,6 +55,7 @@ function ManagerResources.init(self)
     
     --popup shop
    self._resources[EResourceType.ERT_POPUP_SHOP_BUTTON_TAB]                 = '%spopup_shop/button_tab/%s%s.png'
+   self._resources[EResourceType.ERT_POPUP_SHOP_BUTTON_BUY]                 = '%spopup_shop/button_buy/%s%s.png'
    self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_ITEM]                  = '%spopup_shop/view_item/view_item%s.png'
    self._resources[EResourceType.ERT_ICON_ENERGY]                           = '%spopup_shop/content/energy/energy%s.png'
    self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_CONTENT]               = '%spopup_shop/view_content/view_content%s.png'
@@ -61,7 +63,7 @@ function ManagerResources.init(self)
    self._resources[EResourceType.ERT_ICON_REMOVE_BOTTOM_ROW]                = '%spopup_shop/content/remove_bottom_row/remove_bottom_row%s.png'
     self._resources[EResourceType.ERT_ICON_SHUFFLE]                         = '%spopup_shop/content/shuffle/ico_bonus_3%s.png'
     
-   self._resources[EResourceType.ERT_POPUP_SHOP_BUTTON_BUY]                 = "%spopup_shop/button_buy/%s%s.png"
+   
    
 end
 
