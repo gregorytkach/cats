@@ -30,7 +30,8 @@ GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 
 function GameInfo.init(self)
     
-    application.assets_dir = 'game_cats/assets/'
+    application.dir_assets = 'game_cats/assets/'
+    application.dir_data    = 'game_cats/data/'
     
     self._managerResources      = ManagerResources:new()
     self._managerFonts          = ManagerFontsBase:new()
@@ -56,7 +57,7 @@ end
 
 function GameInfo.loadFonts(self)
     
-    local fontsDir = application.assets_dir..'fonts/'
+    local fontsDir = application.dir_assets..'fonts/'
     
     local font0Pattern = string.format("%sfont_%i%s", fontsDir, EFontType.EFT_0, application.scaleSuffix)
     self._managerFonts:loadFont(EFontType.EFT_0, font0Pattern..'.fnt', font0Pattern..'.png', 20)

@@ -91,7 +91,7 @@ function ManagerResources.getPopupBackground(self, type)
         assert(false)
     end
     
-    result = string.format(result, application.assets_dir, application.scaleSuffix)
+    result = string.format(result, application.dir_assets, application.scaleSuffix)
     
     return result
     
@@ -113,7 +113,7 @@ function ManagerResources.getStateBackground(self, value)
         assert(false)
     end
     
-    result = string.format(result, application.assets_dir, application.scaleSuffix)
+    result = string.format(result, application.dir_assets, application.scaleSuffix)
     
     return result
 end
