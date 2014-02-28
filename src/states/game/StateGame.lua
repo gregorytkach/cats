@@ -45,12 +45,8 @@ function StateGame.initLayerScene(self)
         controller  = self,
     }
     
-    self._background = ViewSprite:new(bgParams)
-    self._layerScene:insert(self._background:sourceView())
-    
     self._controllerState = ControllerStateGame:new()
     self._layerScene:insert(self._controllerState:view():sourceView())
-    
 end
 
 function StateGame.initLayerUI(self)

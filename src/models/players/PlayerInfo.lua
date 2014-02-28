@@ -16,6 +16,5 @@ end
 function PlayerInfo.deserialize(self, data)
     PlayerInfoBase.deserialize(self, data)
     
-    
 end
 
