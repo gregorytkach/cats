@@ -93,7 +93,8 @@ function getManagerBonus()
         {
             type            = EBonusType.EBT_ENERGY,
             content_count   = 1
-        }
+        },
+        limit = 10
     }
     
     return result
@@ -180,12 +181,12 @@ end
 function getLevel0Data(isComplete)
     local result =
     {
-        reward_scores    = 0,
-        
+        reward_scores           = 0,
+        reward_currency_soft    = 0,
         rows             = 9,
         columns          = 9,
         
-        turns_limit      = 50,
+        turns_limit      = 10,
         
         
         star_points_1    = 100,

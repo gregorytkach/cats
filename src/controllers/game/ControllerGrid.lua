@@ -1,5 +1,7 @@
 require('game_cats.src.controllers.game.ControllerCat')
 require('game_cats.src.controllers.game.ControllerCell')
+require('game_cats.src.controllers.game.ControllerTile')
+require('game_cats.src.controllers.game.ControllerBonusDog')
 require('game_cats.src.views.game.ViewGrid')
 
 
@@ -55,8 +57,10 @@ function ControllerGrid.init(self)
     
     local cells = self._managerGame:cells()
     
+    
     self._controllersCells   = {}
     self._controllersCats    = {}
+    self._controllersTiles   = {}
     
     local cellsViews    = {}
     
@@ -93,6 +97,52 @@ function ControllerGrid.init(self)
     end
     
     self._view:onCreatedCells(cellsViews)
+    
+    local tiles = self._managerGame:tiles()
+    
+    local tilesViews    = {}
+    
+    
+    for rowIndex, row in ipairs(tiles)do
+        
+        local rowControllers = {}
+        local rowViews       = {}
+        
+        for columnIndex, tile in ipairs(row)do
+            
+            local controllerTile = ControllerTile:new()   
+            
+            table.insert(rowControllers, controllerTile)
+            
+            local tileView = controllerTile:view()
+            table.insert(rowViews, tileView)
+            
+            if not tile then
+                tileView:hide()
+            end
+            
+            
+        end
+        
+        table.insert(self._controllersTiles, rowControllers)
+        
+        table.insert(tilesViews, rowViews)
+        
+    end
+    
+    self._view:onCreatedTiles(tilesViews)
+    
+    self._controllerBonusDog = ControllerBonusDog:new()
+    self._controllerBonusDog:view():sourceView().isVisible = false
+    
+    self._view:sourceView():insert(self._controllerBonusDog:view():sourceView())
+    
+    local cellStart = cellsViews[#cellsViews][#cellsViews[1]]
+    local cellStop  = cellsViews[#cellsViews][1]
+    
+    self._startBonusDogCell = cellStart:sourceView()
+    self._stopBonusDogCell  = cellStop:sourceView()
+    
     
 end
 
@@ -153,8 +203,34 @@ function ControllerGrid.update(self, updateType)
      
         end
         
+    elseif(updateType == EControllerUpdate.ECUT_TILES)then
+        
+        local tiles = self._managerGame:tiles()
+                
+        for rowIndex, row in ipairs(self._controllersTiles)do
+            for columnIndex, controllerTile in ipairs(row)do
+                
+               local tile = tiles[rowIndex][columnIndex]
+                
+               if not tile then
+                    controllerTile:view():hide()
+               end  
+                
+            end
+        end
+        
+    elseif(updateType == EControllerUpdate.ECUT_BONUS_DOG)then
+        
+        self._controllerBonusDog:transition(self._startBonusDogCell, self._stopBonusDogCell)
         
     else
         assert(false)
     end
+end
+
+function ControllerGrid.cleanup(self)
+      
+    self._startBonusDogCell = nil
+    self._stopBonusDogCell  = nil
+    
 end

@@ -9,8 +9,10 @@ ControllerMapItem = classWithSuper(Controller, 'ControllerMapItem')
 --Events
 --
 
+
 function ControllerMapItem.onViewClicked(self, target, event)
     local result = Controller.onViewClicked(self, target, event)
+    
     
     if(not result)then
         if(target == self._view:button())then
@@ -64,6 +66,8 @@ function ControllerMapItem.init(self, params)
         self._view:button():setIsEnabled(false)
     end
     
+   
+    
 end
 
 function ControllerMapItem.update(self, updateType)
@@ -72,6 +76,7 @@ function ControllerMapItem.update(self, updateType)
 end
 
 function ControllerMapItem.cleanup(self)
+    
     self._view:cleanup()
     self._view = nil
     

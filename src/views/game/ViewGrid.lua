@@ -22,6 +22,20 @@ function ViewGrid.onCreatedCells(self, cellsViews)
     
 end
 
+function ViewGrid.onCreatedTiles(self, tilesViews)
+    self._tiles = tilesViews
+    
+    for indexRow, rowTile in ipairs(self._tiles)do
+        
+        for indexCell, cellView in ipairs(rowTile)do
+            
+            self._layerTiles:insert(cellView:sourceView())
+            
+        end
+    end
+    
+end
+
 
 function ViewGrid.onCreatedCat(self, controllerCat) 
     local catView   = controllerCat:view()
@@ -55,6 +69,9 @@ function ViewGrid.init(self, params)
     self._layerCells    = display.newGroup()
     self._sourceView:insert(self._layerCells)
     
+    self._layerTiles    = display.newGroup()
+    self._sourceView:insert(self._layerTiles)
+    
     self._layerCats     = display.newGroup()
     self._sourceView:insert(self._layerCats)
     
@@ -86,13 +103,22 @@ function ViewGrid.placeViews(self)
             cellView:sourceView().x = currentX
             cellView:sourceView().y = currentY
             
+            local tileView = self._tiles[indexRow][indexColumn]
+            
+            tileView:sourceView().x = currentX
+            tileView:sourceView().y = currentY
+            
             currentX = currentX + cellWidth + offsetX 
+            
+            
             
         end
         
         currentX = startX
         
         currentY = currentY + cellHeight + offsetY 
+        
+        
         
     end
     

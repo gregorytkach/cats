@@ -10,6 +10,11 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --
 --Properties
 --
+function ManagerGame.timerPush(self)
+    
+    return self._timerPush
+    
+end
 
 function ManagerGame.focusCat(self)
     return self._focusCat
@@ -17,12 +22,8 @@ end
 
 function ManagerGame.setFocusCat(self, value)
 
-    local isFocusSet  = value ~= nil and self._focusCat == nil
-    local isFocusLost = self._focusCat ~= nil and value == nil
-
-    assert(isFocusSet or isFocusLost)
-
     self._focusCat     = value
+    
 end
 
 function ManagerGame.cells(self)
@@ -33,11 +34,150 @@ function ManagerGame.cats(self)
     return self._cats
 end
 
+function ManagerGame.tiles(self)
+    return self._tiles
+end
 
 --
 --Events
 --
 
+function ManagerGame.onShuffle(self)
+    
+    self:shuffle()
+    
+    
+    self._currentState:block()
+    
+    self._timerPush = timer.performWithDelay(2 * Constants.CHANGE_CELL_TIME,
+        function ()
+
+            self:push()
+            
+        end,
+        0)
+    
+    
+end
+
+function ManagerGame.onRemove9Cells(self)
+    
+   local remove9Cells = {} 
+   
+   for i = 1, 9, 1 do
+           
+      local cat = self._cats[math.random(self._rowsCount)][math.random(self._columnsCount)]
+      
+      while table.indexOf(remove9Cells, cat) ~= nil do
+                
+        cat = self._cats[math.random(self._rowsCount)][math.random(self._columnsCount)]
+          
+      end
+      
+      table.insert(remove9Cells, cat)
+       
+   end
+  
+       
+   for i = 1, 9, 1 do
+   
+       local cat = remove9Cells[i]
+       
+       cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
+       cat:cleanup()
+       self._cats[cat:row()][cat:column()] = nil
+       self._tiles[cat:row()][cat:column()] = false
+       
+   end
+   
+   self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
+   self._currentState:update(EControllerUpdate.ECUT_TILES)
+   
+   self:createNewCats()
+   self:pushes()
+   
+end
+
+function ManagerGame.onRemoveBottomRow(self)
+       
+   for columnIndex = 1, self._columnsCount, 1 do
+       local cat = self._cats[self._rowsCount][columnIndex]
+       
+       cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
+       cat:cleanup()
+       self._cats[self._rowsCount][columnIndex] = nil
+       self._tiles[cat:row()][cat:column()] = false
+       
+   end
+   
+   self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
+   self._currentState:update(EControllerUpdate.ECUT_TILES)
+   self._currentState:update(EControllerUpdate.ECUT_BONUS_DOG)
+   
+   self:createNewCats()
+   self:pushes()
+   
+end
+
+function ManagerGame.onGameStart1(self)
+        
+    for rowIndex = 1, self._rowsCount, 1 do
+
+        local rowCat    = {}
+
+        for columnIndex = 1, self._columnsCount, 1 do
+            
+            local typeCat = 0
+            
+            if columnIndex / 2 == math.floor(columnIndex / 2) then
+                typeCat = 1
+            end
+            
+            if rowIndex / 2 == math.floor(rowIndex / 2) then
+                typeCat = typeCat + 2
+            end
+
+            table.insert(rowCat, typeCat)
+
+        end
+
+        table.insert(self._cats, rowCat)
+
+    end
+    
+    for rowIndex = 1, self._rowsCount, 1 do
+
+        for columnIndex = 1, self._columnsCount, 1 do
+
+            local paramsCat =
+            {
+                type   = self._cats[rowIndex][columnIndex],
+                row    = rowIndex,
+                column = columnIndex
+            }
+
+            local cat = Cat:new(paramsCat)
+            self._cats[rowIndex][columnIndex] = cat
+            
+        end
+
+    end
+    
+    if not self:foundCanMakeCombination() then
+            
+        self._timerPush = timer.performWithDelay(3 * Constants.CHANGE_CELL_TIME,
+        function ()
+            
+            self:onShuffle()
+
+        end,
+        1)
+
+    end
+    
+end
+
+--todo: if onGameStart1 rename
 function ManagerGame.onGameStart(self)
 
     math.randomseed(os.time())
@@ -59,6 +199,8 @@ function ManagerGame.onGameStart(self)
     local countDouble = math.random(self._rowsCount )
 
     local indexes = {}
+    
+    
 
     for i = 1, countDouble, 1 do
 
@@ -164,6 +306,8 @@ function ManagerGame.onGameStart(self)
         end
 
     end
+    
+    
 
 end
 
@@ -306,28 +450,37 @@ function ManagerGame.push(self)
 
             local cat = deletes[i]
 
-            --print(cat:row()..' '..cat:column())
             self._cats[cat:row()][cat:column()] = nil
 
             cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
             cat:cleanup()
+            
+            self._tiles[cat:row()][cat:column()] = false
 
         end
+        
         self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
-
+        self._currentState:update(EControllerUpdate.ECUT_TILES)
+        
+        self:createNewCats()
+        
     else
-
-        if not self:foundCanMakeCombination() then
-            print('need shuffle!')
-        end
 
         timer.cancel(self._timerPush)
         self._timerPush = nil
-
+        self._currentState:unblock()
+        
+        if not self:foundCanMakeCombination() then
+            
+            self:onShuffle()
+            
+        end
 
     end
 
+end
 
+function ManagerGame.createNewCats(self)
     for i = 1, self._columnsCount, 1 do
 
         for foundNil = self._rowsCount, 1, -1   do
@@ -374,11 +527,8 @@ function ManagerGame.push(self)
             end
 
         end
-    end
-
-
-
-
+    end    
+    
 end
 
 function ManagerGame.foundCombination(self, cat, catsCombinations)
@@ -464,12 +614,25 @@ function ManagerGame.foundCombinations(self, cats)
 
 
 end
+function ManagerGame.pushes(self)
+    
+    self._currentState:block()
 
+    self._timerPush = timer.performWithDelay(2 * Constants.CHANGE_CELL_TIME,
+    function ()
+
+        self:push()
+
+    end,
+    0)
+    
+end
+ 
 
 function ManagerGame.tryChangeTo(self, catTo)
 
     assert(self._focusCat ~= nil)
-    assert(catTo      ~= nil)
+    assert(catTo ~= nil)
 
     local catFrom = self._focusCat
 
@@ -484,14 +647,8 @@ function ManagerGame.tryChangeTo(self, catTo)
 
         catFrom:setPosition(rowTo, columnTo)
         catTo:setPosition(rowFrom, columnFrom)
-
-        self._timerPush = timer.performWithDelay(Constants.CHANGE_CELL_TIME,
-        function ()
-
-            self:push()
-
-        end,
-        0)
+        
+        self:pushes()
 
         self:setFocusCat(nil)
 
@@ -527,12 +684,13 @@ function ManagerGame.init(self, params)
 
     self._cats   = {}
     self._cells  = {}
+    self._tiles  = {}
 
-    for i = 1, self._rowsCount, 1 do
+    for rowIndex = 1, self._rowsCount, 1 do
 
         local rowCell   = {}
 
-        for j = 1, self._columnsCount, 1 do
+        for columnIndex = 1, self._columnsCount, 1 do
 
             local paramsCell =
             {
@@ -547,7 +705,74 @@ function ManagerGame.init(self, params)
         table.insert(self._cells, rowCell)
 
     end
+    
+    for rowIndex = 1, self._rowsCount, 1 do
+
+        local rowTile   = {}
+
+        for columnIndex = 1, self._columnsCount, 1 do
+        
+            local tile  = true
+            table.insert(rowTile, tile)
+
+        end
+
+        table.insert(self._tiles, rowTile)
+
+    end
+    
 end
+
+function ManagerGame.shuffleArray(self, array)
+    
+    if #array == 1 then
+        return
+    end
+    
+    for i = 1, #array, 1 do
+                
+        local firstIndex = math.random(#array - 1)
+        
+        local secondIndex = math.random(#array)
+        
+        if secondIndex == firstIndex then
+            
+            secondIndex = firstIndex + math.random(#array - firstIndex)
+            
+        end
+        
+        local cache = array[firstIndex]
+        array[firstIndex] = array[secondIndex]
+        array[secondIndex] = cache
+        
+    end
+    
+end
+
+function ManagerGame.shuffle(self)
+    
+    for rowIndex = 1, self._rowsCount, 1 do
+                
+        self:shuffleArray(self._cats[rowIndex])
+        
+    end
+    
+    self:shuffleArray(self._cats)
+    
+    for rowIndex = 1, self._rowsCount, 1 do
+                
+        for columnIndex = 1, self._columnsCount, 1 do
+            
+            local cat = self._cats[rowIndex][columnIndex]
+            
+            cat:setPosition(rowIndex, columnIndex)
+            
+        end
+        
+    end
+    
+end
+
 
 function ManagerGame.canMakeCombination(self, catFrom, catTo)
 
@@ -640,6 +865,7 @@ function ManagerGame.foundCanMakeCombination(self)
 
         end
     end
+    
 
     return result
 

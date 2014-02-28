@@ -1,4 +1,4 @@
-ViewCell = classWithSuper(ViewBase, 'ViewCell')
+ViewTile = classWithSuper(ViewBase, 'ViewTile')
 
 
 
@@ -6,10 +6,10 @@ ViewCell = classWithSuper(ViewBase, 'ViewCell')
 --Methods
 --
 
-function ViewCell.init(self, params)
+
+
+function ViewTile.init(self, params)
     
-    assert(params.type ~= nil)
-    assert(params.default ~= nil)
     
     ViewBase.init(self, params)
     
@@ -17,16 +17,17 @@ function ViewCell.init(self, params)
     
     self._sourceView = display.newGroup()
     
-    self._viewDefault = self:createSprite(managerResources:getAsImage(EResourceType["ERT_STATE_GAME_VIEW_CELL_DEFAULT_"..params.default]))
-    self._sourceView:insert(self._viewDefault:sourceView())
+    
+    self._viewTile = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_VIEW_CELL_TILE))
     
 end
 
 
-function ViewCell.cleanup(self)
+function ViewTile.cleanup(self)
     
-    self._viewDefault:cleanup()
-    self._viewDefault = nil
+    
+    self._viewTile:cleanup()
+    self._viewTile = nil
     
     self._sourceView:removeSelf()
     self._sourceView = nil
