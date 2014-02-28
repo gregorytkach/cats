@@ -49,7 +49,19 @@ function getManagerLevels()
     table.insert(levels, getLevel0Data(false))
     table.insert(levels, getLevel0Data(false))
     
-    result.levels = levels
+    local levelContainer0 = 
+    {
+        levels          = levels,
+        id              = "1",
+        number          = 1,
+        name            = 'container_0',
+        requirements    = {}
+    }
+    
+    result.level_containers = 
+    {
+        levelContainer0 
+    }
     
     return result
 end
@@ -65,7 +77,7 @@ function getManagerPlayers()
         
         free_purchase_count_remove_bottom_row   = 10,
         free_purchase_count_shuffle             = 3,
-        free_purchase_count_remove_9_cells      = 0
+        free_purchase_count_remove_9_cells      = 10
     }
     
     result.player_current = playerData
@@ -85,16 +97,24 @@ function getManagerBonus()
     result.time_period  = 10
     result.time_left    = 10
     
-    result.energy       = 
+    return result
+end
+
+function getManagerBonusEnergy()
+    local result = 
     {
-        time_period = 15 * 60,
-        time_left   = 5,
-        bonus       =
+        time_period         = 15 * 60,
+        time_left           = 5,
+        bonuses             =
         {
             type            = EBonusType.EBT_ENERGY,
             content_count   = 1
         },
+<<<<<<< HEAD
         limit = 10
+=======
+        limit               = 5
+>>>>>>> 6cd747bc4d3e9279fe9ac349f3c773caddb7be8a
     }
     
     return result
@@ -181,17 +201,27 @@ end
 function getLevel0Data(isComplete)
     local result =
     {
+<<<<<<< HEAD
         reward_scores           = 0,
         reward_currency_soft    = 0,
         rows             = 9,
         columns          = 9,
         
         turns_limit      = 10,
+=======
+        reward_currency_soft    = 10,
+        reward_scores           = 0,
+        
+        rows                    = 9,
+        columns                 = 9,
+        
+        turns_limit             = 50,
+>>>>>>> 6cd747bc4d3e9279fe9ac349f3c773caddb7be8a
         
         
-        star_points_1    = 100,
-        star_points_2    = 200,
-        star_points_3    = 300,
+        star_points_1           = 100,
+        star_points_2           = 200,
+        star_points_3           = 300,
         
         progress =
         {
@@ -202,3 +232,5 @@ function getLevel0Data(isComplete)
     
     return result
 end
+
+
