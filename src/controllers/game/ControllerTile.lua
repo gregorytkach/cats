@@ -1,12 +1,12 @@
-require('game_cats.src.views.game.ViewCell')
+require('game_cats.src.views.game.ViewTile')
 
-ControllerCell = classWithSuper(Controller, 'ControllerCell')
+ControllerTile = classWithSuper(Controller, 'ControllerTile')
 
 --
 --Properties
 --
 
-function ControllerCell.entry(self)
+function ControllerTile.entry(self)
     return self._entry
 end
 
@@ -21,31 +21,27 @@ end
 
 
 
-function ControllerCell.init(self, params)
+function ControllerTile.init(self)
     
-    assert(params       ~= nil)
-    assert(params.entry ~= nil)
-    
-    self._entry  = params.entry
     
     local paramsView = 
     {
         controller  = self,
-        type        = self._entry:type(),
-        default     = params.default
+        
     }
     
     local paramsController = 
     {
-        view = ViewCell:new(paramsView),
+        view = ViewTile:new(paramsView),
     }
     
     Controller.init(self, paramsController)
     
     self._managerGame = GameInfo:instance():managerGame()
+    
 end
 
-function ControllerCell.update(self, updateType)
+function ControllerTile.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
@@ -55,7 +51,7 @@ function ControllerCell.update(self, updateType)
     
 end
 
-function ControllerCell.cleanup(self)
+function ControllerTile.cleanup(self)
     
     self._managerGame = nil
     

@@ -18,7 +18,8 @@ function ViewCell.init(self, params)
     self._sourceView = display.newGroup()
     
     self._viewDefault = self:createSprite(managerResources:getAsImage(EResourceType["ERT_STATE_GAME_VIEW_CELL_DEFAULT_"..params.default]))
-    self._sourceView:insert(self._viewDefault:sourceView())
+    
+    
     
 end
 
@@ -27,6 +28,7 @@ function ViewCell.cleanup(self)
     
     self._viewDefault:cleanup()
     self._viewDefault = nil
+    
     
     self._sourceView:removeSelf()
     self._sourceView = nil

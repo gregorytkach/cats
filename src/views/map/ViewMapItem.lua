@@ -1,6 +1,36 @@
 ViewMapItem = classWithSuper(ViewBase, 'ViewMapItem')
 
 --
+-- Events
+--
+
+function ViewMapItem.touch(self, event)
+    if(event.phase == ETouchEvent.ETE_BEGAN)  then
+        
+        self._x = event.x
+        self._y = event.y
+        
+    elseif(event.phase == ETouchEvent.ETE_MOVED)  then
+        
+        if self._x == nil then
+            self._x = event.x
+            self._y = event.y
+        end
+        
+        self._sourceView.x = self._sourceView.x + event.x - self._x
+        self._sourceView.y = self._sourceView.y + event.y - self._y
+        
+        self._x = event.x
+        self._y = event.y
+        
+    elseif(event.phase == ETouchEvent.ETE_ENDED)  then
+        
+        print(self._sourceView.x..' '..self._sourceView.y)
+        
+    end
+end
+
+--
 -- Properties
 --
 

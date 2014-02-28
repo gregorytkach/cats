@@ -4,9 +4,28 @@ ViewPurchases = classWithSuper(ViewBase, 'ViewPurchases')
 -- Properties
 --
 
+function ViewPurchases.buttonShuffle(self)
+    
+    return self._buttonShuffle
+    
+end
+
+function ViewPurchases.buttonRemoveBottomRow(self)
+    
+    return self._buttonRemoveBottomRow
+    
+end
+
+function ViewPurchases.buttonRemove9Cells(self)
+    
+    return self._buttonRemove9Cells
+    
+end
 
 function ViewPurchases.buttonBuy(self)
+    
     return self._buttonBuy
+    
 end
 
 --
@@ -21,7 +40,6 @@ function ViewPurchases.init(self, params)
     local managerResources = GameInfo:instance():managerResources()
    
     self._buttonShuffle = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_SHUFFLE))
-    self._sourceView:insert(self._buttonShuffle:sourceView())
     
     self._buttonRemoveBottomRow = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_REMOVE_BOTTOM_ROW))
     
@@ -31,7 +49,6 @@ function ViewPurchases.init(self, params)
     --todo: rewrite '0'
         
     self._labelCountRemove9Cells = self:createLabel('0', EFontType.EFT_2)
-    self._sourceView:insert(self._labelCountRemove9Cells:sourceView())
 
     self._labelCountRemoveBottomRow = self:createLabel('0', EFontType.EFT_2)
   

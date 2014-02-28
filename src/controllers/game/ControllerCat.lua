@@ -39,6 +39,7 @@ function ControllerCat.onCreated(self, offsetY)
     
     self._source:toBack()
     self:setPosition(point)
+    
 end
 
 
@@ -74,13 +75,9 @@ function ControllerCat.touch(self, event)
     elseif(event.phase == ETouchEvent.ETE_MOVED) and ControllerCat._enabledTouches then
         
         local isInside = self:isInside(eventGroup)
+        local focusCat = self._managerGame:focusCat()
         
-        if isInside  then
-            
-            local focusCat    =  self._managerGame:focusCat()
-            if(focusCat == nil)then
-                print('todo: fix bug')
-            end
+        if isInside and focusCat ~= nil  then
             
             local focusRow    = focusCat:row()
             local focusColumn = focusCat:column()
@@ -88,7 +85,7 @@ function ControllerCat.touch(self, event)
             local row    = self._entry:row()
             local column = self._entry:column()
             
-            if (focusRow == row and focusColumn ~= column) or (focusRow ~= row and focusColumn == column) then
+            if (focusRow == row and math.abs(focusColumn - column) == 1) or (math.abs(focusRow - row) == 1 and focusColumn == column) then
                 
                 self._managerGame:tryChangeTo(self._entry) 
                 
@@ -146,6 +143,8 @@ function ControllerCat.init(self, params)
     Runtime:addEventListener("touch", self)
     
     self._managerGame   = GameInfo:instance():managerGame()
+    self._stateGame   = GameInfo:instance():managerStates():currentState()
+    
     self._cells         = self._managerGame:cells()
     
     self._enabled = true
@@ -179,7 +178,10 @@ function ControllerCat.setPosition(self, point)
     
     local source = self._view:sourceView()
     
-    ControllerCat._enabledTouches = false
+    
+    if self._managerGame:timerPush() == nil then
+        self._stateGame:block()
+    end
     
     local tweenParams =
     {
@@ -192,6 +194,10 @@ function ControllerCat.setPosition(self, point)
             
             self._tweenMove = nil
             ControllerCat._enabledTouches = true
+            
+            if self._managerGame:timerPush() == nil then
+                self._stateGame:unblock()
+            end
             
         end,
     }

@@ -36,7 +36,7 @@ function ControllerStateMap.init(self)
     
     Controller.init(self, paramsController)
     
-     self._items = {}
+    self._items = {}
     
     local levelContainer        = GameInfo:instance():managerLevels():levelContainers()[1]
     local levels                = levelContainer:levels()

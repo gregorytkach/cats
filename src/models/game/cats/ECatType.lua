@@ -1,9 +1,9 @@
 ECatType =
 {
-    ["ECT_YELLOW"] = 0;
-    ["ECT_RED"]    = 1;
-    ["ECT_GREEN"]  = 2;
-    ["ECT_BLUE"]   = 3;
+    ["ECT_0"] = 0;
+    ["ECT_1"]    = 1;
+    ["ECT_2"]  = 2;
+    ["ECT_3"]   = 3;
     
     ["ECT_COUNT"]  = 4;
 }

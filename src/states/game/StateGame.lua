@@ -24,6 +24,20 @@ end
 -- Methods
 --
 
+--todo: use base methods
+function StateGame.block(self)
+    
+    self._blockerPopups.alpha = 0.01
+    
+end
+
+function StateGame.unblock(self)
+    
+    self._blockerPopups.alpha = 0
+    
+end
+
+
 --Default initializer
 function StateGame.init(self)
     StateBase.init(self)
@@ -37,13 +51,6 @@ end
 
 function StateGame.initLayerScene(self)
     StateBase.initLayerScene(self)
-    
-    local bgParams =
-    {
-        image       = GameInfo:instance():managerResources():getStateBackground(self:getType()),
-        scale   = EScaleType.EST_FILL_HEIGHT,
-        controller  = self,
-    }
     
     self._controllerState = ControllerStateGame:new()
     self._layerScene:insert(self._controllerState:view():sourceView())
@@ -81,8 +88,14 @@ function StateGame.update(self, updateType)
         
         self._controllerState:controllerGrid():update(updateType)
         
+    elseif(updateType == EControllerUpdate.ECUT_TILES)then
+        
+        self._controllerState:controllerGrid():update(updateType)
+        
     elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY)then
         --do nothing
+    elseif(updateType == EControllerUpdate.ECUT_BONUS_DOG)then
+        self._controllerState:controllerGrid():update(updateType)
     else
         assert(false, updateType)
     end

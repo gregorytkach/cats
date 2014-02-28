@@ -30,6 +30,7 @@ function ManagerResources.init(self)
     --state game
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_CELL_DEFAULT_0]       = "%sstate_game/cell/default_0/cell%s.jpg"
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_CELL_DEFAULT_1]       = "%sstate_game/cell/default_1/cell%s.jpg"
+    self._resources[EResourceType.ERT_STATE_GAME_VIEW_CELL_TILE]            = "%sstate_game/cell/game_tile/tile%s.png"
     
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_CAT]                  = "%sstate_game/cats/cat_%s/%s/cat_"
     
@@ -44,6 +45,8 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_BACKGROUND]           = "%sstate_game/ui/view_progress/background/background%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_PROGRESS_BAR]              = "%sstate_game/ui/view_progress/progress_bar/progress_bar%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_ICON_STAR]                 = "%sstate_game/ui/view_progress/icon_star/icon_star%s.png"
+    
+    
     
     --popup game over
     self._resources[EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT]        = '%spopup_game_over/animation/%s/cat_01.png'
@@ -107,6 +110,7 @@ function ManagerResources.getStateBackground(self, value)
     
     if (value == EStateType.EST_GAME) then
         result = '%sstate_game/background/background%s.jpg'
+        
     elseif(value == EStateType.EST_MAP)then
         result = '%sstate_map/map/map_1%s.jpg'
     else
@@ -120,5 +124,15 @@ end
 
 function ManagerResources.initAnimations(self)
     ManagerResourcesBase.initAnimations(self)
-    
+    local animationBonusDog = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 10,
+            time    = 2 * Constants.CHANGE_CELL_TIME,
+        }
+    }
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]       = "%sstate_game/bonus_dog/spritesheet%s.png"
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]      = animationBonusDog
 end
