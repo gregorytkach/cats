@@ -1,5 +1,8 @@
 require('sdk.GameInfoBase')
 
+--todo: remove it
+require('game_cats.deserialize_helper_cats')
+
 require('game_cats.src.Constants')
 require('game_cats.src.controllers.EControllerUpdate')
 require('game_cats.src.views.EFontType')
@@ -33,6 +36,10 @@ function GameInfo.init(self)
     application.dir_assets = 'game_cats/assets/'
     application.dir_data    = 'game_cats/data/'
     
+    GameInfoBase.init(self)
+end
+
+function GameInfo.initManagers(self)
     self._managerResources      = ManagerResources:new()
     self._managerFonts          = ManagerFontsBase:new()
     self._managerParticles      = ManagerParticles:new()
@@ -40,12 +47,22 @@ function GameInfo.init(self)
     self._managerString         = ManagerString:new()
     self._managerSounds         = ManagerSounds:new()
     self._managerPurchases      = ManagerPurchasesBase:new()
-    self._managerBonus          = ManagerBonusEnergyBase:new(BonusInfoBase)
+    self._managerBonusEnergy    = ManagerBonusEnergyBase:new(BonusInfoBase)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo)
+end
+
+function GameInfo.onGameStartComplete(self, response)
     
+    self._managerString:setCurrentLanguage(ELanguageType.ELT_ENGLISH)
     
-    GameInfoBase.init(self)
+    self._managerLevels:deserialize(getManagerLevels())
+    self._managerPlayers:deserialize(getManagerPlayers())
+    self._managerBonusEnergy:deserialize(getManagerBonusEnergy())
+    self._managerPurchases:deserialize(getManagerPurchasesData())
+    
+    self._managerStates:setState(EStateType.EST_MAP)
+    
 end
 
 function GameInfo.registerStates(self)
