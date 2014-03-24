@@ -24,9 +24,10 @@ end
 -- Methods
 --
 
+--todo: use base methods
 function StateGame.block(self)
     
-    self._blockerPopups.alpha = 0.5
+    self._blockerPopups.alpha = 0.01
     
 end
 
@@ -51,10 +52,8 @@ end
 function StateGame.initLayerScene(self)
     StateBase.initLayerScene(self)
     
-    
     self._controllerState = ControllerStateGame:new()
     self._layerScene:insert(self._controllerState:view():sourceView())
-    
 end
 
 function StateGame.initLayerUI(self)

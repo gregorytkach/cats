@@ -56,21 +56,14 @@ function ViewMapItem.init(self, params)
     self._viewStars = {}
     
     local i = 0
---    while i < params.stars_count do
---        
---        local viewStar = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_ICON_STAR))
---        
---        table.insert(self._viewStars, viewStar) 
---        
---        i = i + 1
---    end
-    self._circle = display.newCircle(0, 0, self._button:realHeight() / 2)
-    
-    --self._circle =
-    self._button:sourceView().isVisible = false
-    
-    self._sourceView:insert(self._circle)
-    self._circle:addEventListener('touch', self)
+    while i < params.stars_count do
+        
+        local viewStar = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_ICON_STAR))
+        
+        table.insert(self._viewStars, viewStar) 
+        
+        i = i + 1
+    end
     
 end
 
