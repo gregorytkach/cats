@@ -87,6 +87,9 @@ function StateGame.update(self, updateType)
     elseif(updateType == EControllerUpdate.ECUT_NEED_REMOVE)then
         
         self._controllerState:controllerGrid():update(updateType)
+    elseif(updateType == EControllerUpdate.ECUT_NEW_CATS) then
+        
+        self._controllerState:controllerGrid():update(updateType)
         
     elseif(updateType == EControllerUpdate.ECUT_TILES)then
         

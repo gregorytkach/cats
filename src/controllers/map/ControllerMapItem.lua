@@ -70,6 +70,12 @@ function ControllerMapItem.init(self, params)
     
 end
 
+function ControllerMapItem.showIcon(self, delay)
+    if(not self._isCurrent and self._entry:progress():isComplete())then
+        self._view:animateIcon(delay)
+    end
+end
+
 function ControllerMapItem.update(self, updateType)
     
     

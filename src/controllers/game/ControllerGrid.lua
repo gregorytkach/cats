@@ -12,6 +12,7 @@ ControllerGrid = classWithSuper(Controller, 'ControllerGrid')
 --
 function ControllerGrid.onCatCreated(self, cat)
     
+    
     local paramsController = 
     {
         entry = cat 
@@ -25,7 +26,17 @@ function ControllerGrid.onCatCreated(self, cat)
     
     local offset = controllerCat:view():realHeight() * #self._controllersCells 
     
-    controllerCat:onCreated(offset)
+    local currentColumn = controllerCat:entry():column()
+    
+    if currentColumn ~= self._currentColumn then
+        self._delay = self._delay + Constants.CHANGE_CELL_TIME
+    end
+    
+    self._currentColumn = currentColumn
+    
+    controllerCat:onCreated(offset, self._delay)
+    
+    
     
 end
 
@@ -52,7 +63,7 @@ function ControllerGrid.init(self)
     
     Controller.init(self, paramsController)
     
-    
+    self._delay = 0
     self._managerGame = GameInfo:instance():managerGame()
     
     local cells = self._managerGame:cells()
@@ -137,12 +148,19 @@ function ControllerGrid.init(self)
     
     self._view:sourceView():insert(self._controllerBonusDog:view():sourceView())
     
+    self._bottomRow = {}
+    
+    
+    
     local cellStart = cellsViews[#cellsViews][#cellsViews[1]]
     local cellStop  = cellsViews[#cellsViews][1]
     
     self._startBonusDogCell = cellStart:sourceView()
     self._stopBonusDogCell  = cellStop:sourceView()
     
+    
+    
+    self._delay = 0
     
 end
 
@@ -183,7 +201,7 @@ function ControllerGrid.update(self, updateType)
         
         for i, controllerCat in ipairs(self._controllersCats)do
                 
-            controllerCat:onCreated(offset)
+            controllerCat:onCreated(offset, (controllerCat:entry():column() - 1) * Constants.CHANGE_CELL_TIME )
                 
         end
         
@@ -219,9 +237,32 @@ function ControllerGrid.update(self, updateType)
             end
         end
         
+    elseif(updateType == EControllerUpdate.ECUT_NEW_CATS) then
+        
+        self._delay = 0
+        
     elseif(updateType == EControllerUpdate.ECUT_BONUS_DOG)then
         
         self._controllerBonusDog:transition(self._startBonusDogCell, self._stopBonusDogCell)
+        
+        local cats = self._managerGame:cats()
+        for i = 1, #cats[1], 1 do
+            local cat     = cats[#cats][i]
+            local catView = cat:controller():view()
+            table.insert(self._bottomRow, catView)
+        end
+        
+        local catView = self._bottomRow[#self._bottomRow]
+        table.remove(self._bottomRow, #self._bottomRow)
+        catView:hide()
+        
+        self._timerBonusDog = timer.performWithDelay(Constants.BONUS_DOG_TIME / #self._bottomRow, 
+        function ()
+            local catView = self._bottomRow[#self._bottomRow]
+            catView:hide()
+            table.remove(self._bottomRow, #self._bottomRow)
+        end, 
+        #self._bottomRow)
         
     else
         assert(false)
@@ -229,6 +270,15 @@ function ControllerGrid.update(self, updateType)
 end
 
 function ControllerGrid.cleanup(self)
+    
+    if self._timerBonusDog ~= nil then
+        timer.cancel(self._timerBonusDog)
+    end
+    
+    
+    for i = #self._bottomRow, 1, -1 do
+        table.remove(self._bottomRow, i)
+    end
       
     self._startBonusDogCell = nil
     self._stopBonusDogCell  = nil

@@ -15,7 +15,13 @@ function ControllerPurchases.onViewClicked(self, target, event)
         
         if target == self._view:buttonRemoveBottomRow() then
             
-            self._managerGame:onRemoveBottomRow()
+            GameInfo:instance():managerStates():currentState():update(EControllerUpdate.ECUT_BONUS_DOG)
+            self._timerRemoveBottomRow = timer.performWithDelay(Constants.BONUS_DOG_TIME, 
+            function ()
+                self._managerGame:onRemoveBottomRow()
+            end, 
+            1)
+            
             
         elseif  target == self._view:buttonShuffle() then
             
@@ -63,6 +69,12 @@ function ControllerPurchases.update(self, updateType)
 end
 
 function ControllerPurchases.cleanup(self)
+    
+    if self._timerRemoveBottomRow ~= nil then
+        timer.cancel(self._timerRemoveBottomRow)
+        self._timerRemoveBottomRow = nil
+    end
+    
     self._view:cleanup()
     self._view = nil
     

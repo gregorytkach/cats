@@ -10,6 +10,11 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --
 --Properties
 --
+
+function ManagerGame.isCatsComplete(self)
+    return self._isCatsComplete
+end
+
 function ManagerGame.timerPush(self)
     
     return self._timerPush
@@ -47,16 +52,14 @@ function ManagerGame.onShuffle(self)
     self:shuffle()
     
     
-    self._currentState:block()
+    self:pushes()
     
-    self._timerPush = timer.performWithDelay(2 * Constants.CHANGE_CELL_TIME,
-        function ()
+    
+end
 
-            self:push()
-            
-        end,
-        0)
+function ManagerGame.onCatsComplete(self)
     
+    self._isCatsComplete = true
     
 end
 
@@ -112,7 +115,7 @@ function ManagerGame.onRemoveBottomRow(self)
    
    self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
    self._currentState:update(EControllerUpdate.ECUT_TILES)
-   self._currentState:update(EControllerUpdate.ECUT_BONUS_DOG)
+   
    
    self:createNewCats()
    self:pushes()
@@ -199,7 +202,6 @@ function ManagerGame.onGameStart(self)
     local countDouble = math.random(self._rowsCount )
 
     local indexes = {}
-    
     
 
     for i = 1, countDouble, 1 do
@@ -400,7 +402,12 @@ end
 
 
 function ManagerGame.push(self)
-
+    
+    if not self._isCatsComplete then
+        return
+    end
+   
+        
     local deletes   = {}
 
     for typeCat = 0, ECatType.ECT_COUNT - 1, 1 do
@@ -468,7 +475,7 @@ function ManagerGame.push(self)
 
         timer.cancel(self._timerPush)
         self._timerPush = nil
-        self._currentState:unblock()
+        self._currentState:unblock() 
         
         if not self:foundCanMakeCombination() then
             
@@ -481,6 +488,10 @@ function ManagerGame.push(self)
 end
 
 function ManagerGame.createNewCats(self)
+    
+    local lastCreatedCat = nil
+    self._isCatsComplete = false
+    
     for i = 1, self._columnsCount, 1 do
 
         for foundNil = self._rowsCount, 1, -1   do
@@ -521,7 +532,7 @@ function ManagerGame.createNewCats(self)
                     self._currentState:onCatCreated(cat)
 
                     self._cats[foundNil][i] = cat
-
+                    lastCreatedCat = cat
                 end
 
             end
@@ -529,6 +540,17 @@ function ManagerGame.createNewCats(self)
         end
     end    
     
+    if lastCreatedCat ~= nil then
+            
+        lastCreatedCat:setIsLast(true)
+        
+    else
+                
+        self._isCatsComplete = true
+        
+    end
+    
+    self._currentState:update(EControllerUpdate.ECUT_NEW_CATS)
 end
 
 function ManagerGame.foundCombination(self, cat, catsCombinations)
@@ -614,11 +636,12 @@ function ManagerGame.foundCombinations(self, cats)
 
 
 end
+
 function ManagerGame.pushes(self)
     
     self._currentState:block()
 
-    self._timerPush = timer.performWithDelay(2 * Constants.CHANGE_CELL_TIME,
+    self._timerPush = timer.performWithDelay(Constants.CHANGE_CELL_TIME ,
     function ()
 
         self:push()
@@ -720,6 +743,8 @@ function ManagerGame.init(self, params)
         table.insert(self._tiles, rowTile)
 
     end
+    
+    self._isCatsComplete = true
     
 end
 
