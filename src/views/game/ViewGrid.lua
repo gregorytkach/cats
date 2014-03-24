@@ -87,8 +87,8 @@ function ViewGrid.placeViews(self)
     local cellWidth  = cellView:realWidth()
     local cellHeight = cellView:realHeight()
     
-    local offsetX = 3
-    local offsetY = 3
+    local offsetX = 0
+    local offsetY = 0
     
     local startX = -((#self._cells[1] - 1) * offsetX + cellWidth  * #self._cells[1]) / 2 + cellWidth  / 2
     local startY = -((#self._cells    - 1) * offsetY + cellHeight * #self._cells) / 2    + cellHeight / 2

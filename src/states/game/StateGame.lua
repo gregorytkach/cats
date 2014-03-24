@@ -6,6 +6,11 @@ StateGame = classWithSuper(StateBase, 'StateGame')
 --
 --Properties
 --
+
+function StateGame.scaleWidth(self)
+    return  self._controllerState:view():scaleWidth()
+end
+
 function StateGame.getType(self)
     return  EStateType.EST_GAME
 end
@@ -116,6 +121,8 @@ function StateGame.placeViews(self)
     local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
     
     self:setMaxPopupWidth(popupWidthMax)
+    
+    
 end
 
 function StateGame.cleanup(self)

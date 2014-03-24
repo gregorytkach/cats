@@ -51,8 +51,10 @@ end
 
 function ControllerCat.isInside(self, event)
     
-    local isInsideHorizontal    = math.abs(event.x - self._source.x) < self._view:realWidth() * 0.5 
-    local isInsideVertical      = math.abs(event.y - self._source.y) < self._view:realHeight() * 0.5
+    local scaleWidth = self._stateGame:scaleWidth()
+    
+    local isInsideHorizontal    = math.abs(event.x - self._source.x * scaleWidth) < self._view:realWidth() * 0.5 * scaleWidth
+    local isInsideVertical      = math.abs(event.y - self._source.y * scaleWidth) < self._view:realHeight() * 0.5 * scaleWidth
     
     return isInsideHorizontal and isInsideVertical
     

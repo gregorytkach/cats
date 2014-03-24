@@ -5,6 +5,11 @@ ViewStateGame = classWithSuper(ViewStateBase, 'ViewStateGame')
 --
 --Properties
 --
+
+function ViewStateGame.scaleWidth(self)
+    return self._scaleWidth
+end
+
 function ViewStateGame.setViewGrid(self, value)
     
     assert(value ~= nil)
@@ -48,7 +53,18 @@ end
 function ViewStateGame.placeViews(self)
     ViewStateBase.placeViews(self)
     
+    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
     self._viewGrid:placeViews()
+    
+    self._scaleWidth = 1
+    if self._viewGrid:realWidth() > widthMax then
+        self._scaleWidth = widthMax / self._viewGrid:realWidth()
+        
+        self._viewGrid:sourceView().xScale = self._viewGrid:sourceView().xScale * self._scaleWidth
+        self._viewGrid:sourceView().yScale = self._viewGrid:sourceView().xScale
+    end
+    
     self._viewGrid:sourceView().x = display.contentCenterX
     self._viewGrid:sourceView().y = display.contentCenterY 
     
