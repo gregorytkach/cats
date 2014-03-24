@@ -17,6 +17,7 @@ EResourceType =
     ["ERT_STATE_GAME_BUTTON_BUY"]               = "ERT_STATE_GAME_BUTTON_BUY";
     
     ["ERT_STATE_GAME_ANIMATION_BONUS_DOG"]      = "ERT_STATE_GAME_ANIMATION_BONUS_DOG";
+    ["ERT_STATE_GAME_ANIMATION_CAT"]            = "ERT_STATE_GAME_ANIMATION_CAT";
     
     --purchases
     

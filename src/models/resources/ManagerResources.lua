@@ -49,11 +49,11 @@ function ManagerResources.init(self)
     
     
     --popup game over
-    self._resources[EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT]        = '%spopup_game_over/animation/%s/cat_01.png'
+    
     self._resources[EResourceType.ERT_POPUP_GAME_OVER_VIEW_ENERGY]          = '%spopup_game_over/view_energy/view_energy%s.png'
     
     --popup win
-    self._resources[EResourceType.ERT_POPUP_WIN_ANIMATION_CAT]              = '%spopup_win/animation/%s/cat_01.png'
+    
     self._resources[EResourceType.ERT_POPUP_WIN_VIEW_TILE]                  = '%spopup_win/view_tile/view_tile%s.png'
     
     --popup shop
@@ -124,7 +124,7 @@ end
 
 function ManagerResources.initAnimations(self)
     ManagerResourcesBase.initAnimations(self)
-    local animationBonusDog = 
+    local gameAnimationBonusDog = 
     {
         {
             name    = "default",
@@ -133,6 +133,45 @@ function ManagerResources.initAnimations(self)
             time    = 2 * Constants.CHANGE_CELL_TIME,
         }
     }
-    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]       = "%sstate_game/bonus_dog/spritesheet%s.png"
-    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]      = animationBonusDog
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]       = "%sstate_game/animations/bonus_dog/spritesheet%s.png"
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_BONUS_DOG]      = gameAnimationBonusDog
+    
+    local gameAnimationCat = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 10,
+            time    = 2 * Constants.CHANGE_CELL_TIME,
+        }
+    }
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_CAT]       = "%sstate_game/cats/cat_%s/spritesheet%s.png"
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_CAT]      = gameAnimationCat
+    
+    local popupGameOverAnimationCat = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 19,
+            time    = 2 * application.animation_duration,
+        }
+    }
+    
+    self._resources[EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT]       = "%spopup_game_over/animation/spritesheet%s.png"
+    self._animations[EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT]      = popupGameOverAnimationCat
+    
+    local popupWinAnimationCat = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 10,
+            time    = 2 * application.animation_duration,
+        }
+    }
+    
+    self._resources[EResourceType.ERT_POPUP_WIN_ANIMATION_CAT]       = "%spopup_win/animation/spritesheet%s.png"
+    self._animations[EResourceType.ERT_POPUP_WIN_ANIMATION_CAT]      = popupGameOverAnimationCat
+    
 end

@@ -32,21 +32,21 @@ function ViewCat.init(self, params)
     local managerResources = GameInfo:instance():managerResources()
     
     self._sourceView = display.newGroup()
+
     
-    local _type = ''..params.type
+    self._animation = managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_CAT, params.type)
+    self._sourceView:insert(self._animation)
     
-    local image = managerResources:getAsImageWithParam(EResourceType.ERT_STATE_GAME_VIEW_CAT, _type).."%s_01.png"
     
-    self._viewCat = self:createSprite(string.format(image, _type ))
-    self._sourceView:insert(self._viewCat:sourceView())
+    self._animation:play()
     
 end
 
 
 function ViewCat.cleanup(self)
     
-    self._viewCat:cleanup()
-    self._viewCat = nil
+    self._animation:removeSelf()
+    self._animation = nil
     
     self._sourceView:removeSelf()
     self._sourceView = nil

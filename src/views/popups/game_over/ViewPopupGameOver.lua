@@ -11,8 +11,11 @@ function ViewPopupGameOver.init(self, params)
     self:initBackground(managerResources:getPopupBackground(self._controller:getType()))
     self:initTitle(EStringType.EST_POPUP_GAME_OVER_TITLE)
     
-    self._animationCat = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT))
-    self._sourceView:insert(self._animationCat:sourceView())
+    self._animationCat = managerResources:getAsAnimation(EResourceType.ERT_POPUP_GAME_OVER_ANIMATION_CAT)
+    self._sourceView:insert(self._animationCat)
+    
+    
+    self._animationCat:play()
 
     
     self._viewEnergy   = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_GAME_OVER_VIEW_ENERGY))
@@ -39,8 +42,8 @@ function ViewPopupGameOver.placeViews(self)
     self._labelTitle:sourceView().x = 0
     self._labelTitle:sourceView().y = 0 - realHeight / 2 + 25 + self._labelTitle:realHeight() / 2
     
-    self._animationCat:sourceView().x = - realWidth / 2 + self._animationCat:realWidth() / 2 + 40
-    self._animationCat:sourceView().y =  0
+    self._animationCat.x = - realWidth / 2 + self._animationCat.contentWidth / 2 + 40
+    self._animationCat.y =  0
     
 
     self._viewEnergy:sourceView().x = self._viewEnergy:realWidth() * 0.75

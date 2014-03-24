@@ -40,6 +40,7 @@ function ControllerCat.onCreated(self, offsetY, delay)
         y       = yOriginal,
         delay   = delay,
         time    = timeInterval,
+        transition  = ControllerCat.easeOutBounce,
     }
     
     self._source:toFront()
@@ -183,7 +184,7 @@ function ControllerCat.update(self, updateType)
 end
 
 function ControllerCat.easeOutBounce(t, tMax, start, delta)
-    return start + (delta * (t / tMax)) * (1 + 0.1 * t / tMax * math.sin((t - tMax) / 10))   -- ControllerCat.easeOutBounceRatio(t / tMax))
+    return start + (delta * (t / tMax)) * (0.8 + 0.2 * t / tMax + 0.1 * math.sin((t - tMax) / 10))   -- ControllerCat.easeOutBounceRatio(t / tMax))
 end
 
 function ControllerCat.setPosition(self, point)
@@ -202,7 +203,7 @@ function ControllerCat.setPosition(self, point)
         time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
         x           = point.x,
         y           = point.y,
-        transition  = ControllerCat.easeOutBounce,  -- GameInfo:instance():managerStates():easingProvider().easeOutBounce,
+        --transition  = ControllerCat.easeOutBounce,  -- GameInfo:instance():managerStates():easingProvider().easeOutBounce,
         onComplete  = 
         function ()
             
@@ -215,13 +216,18 @@ function ControllerCat.setPosition(self, point)
             ControllerCat._enabledTouches = true
             
             if self._managerGame ~= nil and self._entry:isLast() then
+                
                 self._managerGame:onCatsComplete()
                 self._entry:setIsLast(false) 
-                self._managerGame:push()
+                
             end
             
         end,
     }
+    
+    if point.transition ~= nil then
+        tweenParams.transition = point.transition
+    end
     
     self._tweenMove = transition.to(source, tweenParams)  
     
