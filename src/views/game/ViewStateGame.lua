@@ -33,7 +33,7 @@ function ViewStateGame.init(self, params)
     local bgParams =
     {
         image       = GameInfo:instance():managerResources():getStateBackground(self:getType()),
-        scale   = EScaleType.EST_FILL_HEIGHT,
+        scale       = EScaleType.EST_FILL_HEIGHT,
         controller  = self,
     }
     

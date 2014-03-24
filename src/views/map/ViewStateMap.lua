@@ -152,7 +152,15 @@ function ViewStateMap.init(self, params)
 end
 
 function ViewStateMap.createMap(self, value)
-    local result = self:createSprite(self._managerResources:getAsImageWithParam(EResourceType.ERT_STATE_MAP_MAP_PART, value))
+    local result = nil
+    
+    
+    local imageParams = 
+    {
+        scale = EScaleType.EST_MAX
+    }
+    
+    result = self:createSprite(self._managerResources:getAsImageWithParam(EResourceType.ERT_STATE_MAP_MAP_PART, value), imageParams)
     
     result:sourceView():toBack()
     
@@ -160,6 +168,7 @@ function ViewStateMap.createMap(self, value)
     
     return result
 end
+
 
 function ViewStateMap.placeViews(self)
     ViewStateBase.placeViews(self)
