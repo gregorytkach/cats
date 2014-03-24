@@ -56,22 +56,51 @@ function ViewMapItem.init(self, params)
     self._viewStars = {}
     
     local i = 0
---    while i < params.stars_count do
---        
---        local viewStar = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_ICON_STAR))
---        
---        table.insert(self._viewStars, viewStar) 
---        
---        i = i + 1
---    end
-    self._circle = display.newCircle(0, 0, self._button:realHeight() / 2)
+    while i < params.stars_count do
+        
+        local viewStar = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_ICON_STAR))
+        
+        table.insert(self._viewStars, viewStar) 
+--        viewStar.isVisible = false
+        
+        i = i + 1
+    end
+-- todo: for change position
+--    self._circle = display.newCircle(0, 0, self._button:realWidth() / 2)
+--    self._sourceView:insert(self._circle)
+--    self._circle:addEventListener('touch', self)
+--    self._button:sourceView().isVisible = false
+end
+
+function ViewMapItem.animateIcon(self, delay)
+    local targetSource = self._sourceView
     
-    --self._circle =
-    self._button:sourceView().isVisible = false
+    local time = application.animation_duration
     
-    self._sourceView:insert(self._circle)
-    self._circle:addEventListener('touch', self)
+    local paramsTweenDown =
+    {
+        y           = targetSource.y,
+        time        = time,
+        onComplete  = 
+        function() 
+            self._tweenIcon = nil  
+        end
+    }
     
+    local paramsTweenUp = 
+    {
+        y          = targetSource.y - 10,
+        delay      = delay,
+        time       = time,
+        onComplete = 
+        function() 
+            self._tweenIcon = nil  
+            
+            self._tweenIcon = transition.to(targetSource, paramsTweenDown)
+        end
+    }
+    
+    self._tweenIcon = transition.to(targetSource, paramsTweenUp)
 end
 
 function ViewMapItem.placeViews(self)
@@ -112,6 +141,52 @@ function ViewMapItem.placeViews(self)
     
     self._button:sourceView().x = 0
     self._button:sourceView().y = 0
+end
+
+function ViewMapItem.getParamsTweenShow(self, time, callback)
+    
+    if(time == nil)then
+        time = application.animation_duration * 2
+    end
+    
+    local result = 
+    {
+        time        = time,
+        xScale      = 1,
+        yScale      = 1,
+        transition  = GameInfo:instance():managerStates():easingProvider().easeOutBounce,
+        onComplete  = 
+        function()
+            if(callback ~= nil)then
+                callback()
+            end
+        end
+    }
+    
+    return result
+end
+
+function ViewMapItem.getParamsTweenHide(self, time, callback)
+    
+    if(time == nil)then
+        time = application.animation_duration * 2
+    end
+    
+    local result = 
+    {
+        time        = time,
+        xScale      = 0.01,
+        yScale      = 0.01,
+        transition  = GameInfo:instance():managerStates():easingProvider().easeInBounce,
+        onComplete  = 
+        function()
+            if(callback ~= nil)then
+                callback()
+            end
+        end
+    }
+    
+    return result
 end
 
 function ViewMapItem.cleanup(self)

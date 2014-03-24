@@ -11,6 +11,15 @@ Cat = classWithSuper(Object, 'Cat')
 --
 --Properties
 --
+function Cat.isLast(self)
+    return self._isLast
+end
+
+function Cat.setIsLast(self, value)
+    assert(value ~= nil)
+    
+    self._isLast = value
+end
 
 function Cat.type(self)
     return self._type

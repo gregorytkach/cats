@@ -13,6 +13,19 @@ end
 --
 --Events
 --
+function StateMap.prepareToExit(self)
+    
+    self._blockerScene.alpha = 0.01
+    
+    local callback = function()
+        self._blockerScene.alpha = 0
+        
+        GameInfoBase:instance():managerStates():onStateGone()
+    end
+    
+    self._controllerStateMap:itemsHide(callback)
+    
+end
 
 --
 -- Methods
@@ -27,8 +40,8 @@ end
 function StateMap.initLayerScene(self)
     StateBase.initLayerScene(self)
     
-    self._controllerState = ControllerStateMap:new()
-    self._layerScene:insert(self._controllerState:view():sourceView())
+    self._controllerStateMap = ControllerStateMap:new()
+    self._layerScene:insert(self._controllerStateMap:view():sourceView())
     
 end
 
@@ -51,6 +64,8 @@ function StateMap.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
+        self._controllerStateMap:itemsShow()
+        
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -69,7 +84,7 @@ end
 function StateMap.placeViews(self)
     StateBase.placeViews(self)
     
-    self._controllerState:view():placeViews()
+    self._controllerStateMap:view():placeViews()
     
     self._controllerUI:view():placeViews()
     
@@ -77,8 +92,8 @@ end
 
 function StateMap.cleanup(self)
     
-    self._controllerState:cleanup()
-    self._controllerState = nil
+    self._controllerStateMap:cleanup()
+    self._controllerStateMap = nil
     
     self._controllerUI:cleanup()
     self._controllerUI = nil

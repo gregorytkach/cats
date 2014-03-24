@@ -40,7 +40,7 @@ function ControllerBonusDog.transition(self, start, stop)
     {
         x           = stop.x - self._view:realWidth(),
         y           = stop.y,
-        time        = 2 * Constants.CHANGE_CELL_TIME ,
+        time        = Constants.BONUS_DOG_TIME ,
         onComplete  = function () 
                         self._view:animation():pause()
                         source.isVisible = false 

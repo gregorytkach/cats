@@ -25,19 +25,24 @@ end
 --
 
 
-function ControllerCat.onCreated(self, offsetY)
+function ControllerCat.onCreated(self, offsetY, delay)
     
     local yOriginal = self._source.y
     
     self._source.y = self._source.y - offsetY
     
+    local delay         =  delay
+    local timeInterval  =  Constants.CHANGE_CELL_TIME
+    
     local point =
     {
-        x = self._source.x,
-        y = yOriginal,
+        x       = self._source.x,
+        y       = yOriginal,
+        delay   = delay,
+        time    = timeInterval,
     }
     
-    self._source:toBack()
+    self._source:toFront()
     self:setPosition(point)
     
 end
@@ -143,7 +148,7 @@ function ControllerCat.init(self, params)
     Runtime:addEventListener("touch", self)
     
     self._managerGame   = GameInfo:instance():managerGame()
-    self._stateGame   = GameInfo:instance():managerStates():currentState()
+    self._stateGame     = GameInfo:instance():managerStates():currentState()
     
     self._cells         = self._managerGame:cells()
     
@@ -162,6 +167,9 @@ function ControllerCat.update(self, updateType)
         local cell      = self._cells[row][column]
         local cellView  = cell:controller():view():sourceView()
         
+        cellView.delay = 0
+        cellView.time =  Constants.CHANGE_CELL_TIME
+        
         self:setPosition(cellView)
         
     elseif(updateType == EControllerUpdate.ECUT_NEED_REMOVE)then 
@@ -174,34 +182,49 @@ function ControllerCat.update(self, updateType)
     
 end
 
+function ControllerCat.easeOutBounce(t, tMax, start, delta)
+    return start + (delta * (t / tMax)) * (1 + 0.1 * t / tMax * math.sin((t - tMax) / 10))   -- ControllerCat.easeOutBounceRatio(t / tMax))
+end
+
 function ControllerCat.setPosition(self, point)
     
     local source = self._view:sourceView()
-    
     
     if self._managerGame:timerPush() == nil then
         self._stateGame:block()
     end
     
+    ControllerCat._enabledTouches = false
+    
     local tweenParams =
     {
-        
-        time        = Constants.CHANGE_CELL_TIME, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
+        delay       = point.delay,
+        time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
         x           = point.x,
         y           = point.y,
+        transition  = ControllerCat.easeOutBounce,  -- GameInfo:instance():managerStates():easingProvider().easeOutBounce,
         onComplete  = 
         function ()
             
             self._tweenMove = nil
+            
+            if self._managerGame ~= nil and self._managerGame:timerPush() == nil  then
+                self._stateGame:unblock()
+            end
+            
             ControllerCat._enabledTouches = true
             
-            if self._managerGame:timerPush() == nil then
-                self._stateGame:unblock()
+            if self._managerGame ~= nil and self._entry:isLast() then
+                self._managerGame:onCatsComplete()
+                self._entry:setIsLast(false) 
+                self._managerGame:push()
             end
             
         end,
     }
+    
     self._tweenMove = transition.to(source, tweenParams)  
+    
 end
 
 

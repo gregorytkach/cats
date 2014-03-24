@@ -24,9 +24,10 @@ end
 -- Methods
 --
 
+--todo: use base methods
 function StateGame.block(self)
     
-    self._blockerPopups.alpha = 0.5
+    self._blockerPopups.alpha = 0.01
     
 end
 
@@ -51,10 +52,8 @@ end
 function StateGame.initLayerScene(self)
     StateBase.initLayerScene(self)
     
-    
     self._controllerState = ControllerStateGame:new()
     self._layerScene:insert(self._controllerState:view():sourceView())
-    
 end
 
 function StateGame.initLayerUI(self)
@@ -86,6 +85,9 @@ function StateGame.update(self, updateType)
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
     elseif(updateType == EControllerUpdate.ECUT_NEED_REMOVE)then
+        
+        self._controllerState:controllerGrid():update(updateType)
+    elseif(updateType == EControllerUpdate.ECUT_NEW_CATS) then
         
         self._controllerState:controllerGrid():update(updateType)
         
