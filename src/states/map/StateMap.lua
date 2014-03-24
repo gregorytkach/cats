@@ -35,9 +35,8 @@ end
 function StateMap.initLayerUI(self)
     StateBase.initLayerUI(self)
     
-    --todo: implement
---    self._controllerUI = ControllerUIMap:new()
---    self._layerUI:insert(self._controllerUI:view():sourceView())
+    self._controllerUI = ControllerUIMap:new()
+    self._layerUI:insert(self._controllerUI:view():sourceView())
     
 end
 
@@ -72,8 +71,7 @@ function StateMap.placeViews(self)
     
     self._controllerState:view():placeViews()
     
-    --todo: implement
---    self._controllerUI:view():placeViews()
+    self._controllerUI:view():placeViews()
     
 end
 
