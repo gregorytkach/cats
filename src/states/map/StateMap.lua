@@ -51,6 +51,7 @@ function StateMap.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
+        self:showPopup(EPopupType.EPT_SHOP)
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -73,6 +74,9 @@ function StateMap.placeViews(self)
     
     self._controllerUI:view():placeViews()
     
+    local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
+    self:setMaxPopupWidth(popupWidthMax)
 end
 
 function StateMap.cleanup(self)
