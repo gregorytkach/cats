@@ -32,14 +32,16 @@ function ViewCat.init(self, params)
     local managerResources = GameInfo:instance():managerResources()
     
     self._sourceView = display.newGroup()
-
+    
     
     self._animation = managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_CAT, params.type)
     self._sourceView:insert(self._animation)
     
+    local frame = math.random(1,  self._animation.numFrames)
+    
+    self._animation:setFrame(frame)
     
     self._animation:play()
-    
 end
 
 

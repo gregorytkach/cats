@@ -61,8 +61,15 @@ function GameInfo.onGameStartComplete(self, response)
     self._managerBonusEnergy:deserialize(getManagerBonusEnergy())
     self._managerPurchases:deserialize(getManagerPurchasesData())
     
-    self._managerStates:setState(EStateType.EST_MAP)
+    --    self._managerStates:setState(EStateType.EST_MAP)
     
+    local paramsGame = 
+    {
+        currentLevel = self._managerLevels:firstIncompleteLevel()
+    }
+    
+    self:onGameStart(ManagerGame:new(paramsGame))
+    self._managerStates:setState(EStateType.EST_GAME)
 end
 
 function GameInfo.registerStates(self)
