@@ -113,7 +113,9 @@ function StateGame.placeViews(self)
     self._controllerState:view():placeViews()
     self._controllerUI:view():placeViews()
     
+    local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
     
+    self:setMaxPopupWidth(popupWidthMax)
 end
 
 function StateGame.cleanup(self)
