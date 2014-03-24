@@ -81,13 +81,13 @@ function ViewStateMap.touch(self, event)
             end
             
             if(self._mapLeft ~= nil)then
-                self._mapLeft:sourceView().x    = self._distance - self._mapPartWidth --- 5
+                self._mapLeft:sourceView().x    = self._distance - self._mapPartWidth + application.margin_left--- 5
             end
             
-            self._mapCenter:sourceView().x      = self._distance  
+            self._mapCenter:sourceView().x      = self._distance + application.margin_left 
             
             if(self._mapRight ~= nil)then
-                self._mapRight:sourceView().x   = self._distance  + self._mapPartWidth --+ 5
+                self._mapRight:sourceView().x   = self._distance  + self._mapPartWidth + application.margin_left--+ 5
             end
             
             self._viewItems:sourceView().x    = -self._mapPartWidth * self._currentMapIndex + self._distance
@@ -152,7 +152,15 @@ function ViewStateMap.init(self, params)
 end
 
 function ViewStateMap.createMap(self, value)
-    local result = self:createSprite(self._managerResources:getAsImageWithParam(EResourceType.ERT_STATE_MAP_MAP_PART, value))
+    local result = nil
+    
+    
+    local imageParams = 
+    {
+        scale = EScaleType.EST_MAX
+    }
+    
+    result = self:createSprite(self._managerResources:getAsImageWithParam(EResourceType.ERT_STATE_MAP_MAP_PART, value), imageParams)
     
     result:sourceView():toBack()
     
@@ -161,26 +169,26 @@ function ViewStateMap.createMap(self, value)
     return result
 end
 
+
 function ViewStateMap.placeViews(self)
     ViewStateBase.placeViews(self)
     
     local mapOffsetY = application.margin_top + self._mapCenter:realHeight() / 2
     
     if(self._mapLeft ~= nil)then
-        self._mapLeft:sourceView().x = self._distance - self._mapPartWidth --- 5
+        self._mapLeft:sourceView().x = self._distance - self._mapPartWidth + application.margin_left --- 5
         self._mapLeft:sourceView().y = mapOffsetY
     end
     
-    self._mapCenter:sourceView().x = self._distance
+    self._mapCenter:sourceView().x = self._distance + application.margin_left
     self._mapCenter:sourceView().y = mapOffsetY
     
     if(self._mapRight ~= nil) then
-        self._mapRight:sourceView().x = self._distance  + self._mapPartWidth --+ 5
+        self._mapRight:sourceView().x = self._distance  + self._mapPartWidth + application.margin_left--+ 5
         self._mapRight:sourceView().y = mapOffsetY
     end
     
     self._viewItems:placeViews()
-    
 end
 
 function ViewStateMap.cleanup(self)

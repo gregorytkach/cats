@@ -51,6 +51,24 @@ function ViewUIMap.placeViews(self)
     self._viewEnergy:sourceView().x = self._viewStars:sourceView().x
     self._viewEnergy:sourceView().y = self._viewStars:sourceView().y + self._viewStars:realHeight() / 2 + self._viewEnergy:realHeight() / 2
     
+    local buttonLeftBorder = self._buttonFreeEnergy:sourceView().x - self._buttonFreeEnergy:realWidth() / 2
+    local viewRightBorder  = self._viewStars:sourceView().x + self._viewStars:realWidth() / 2
+    
+    if(buttonLeftBorder < viewRightBorder)then
+        local buttonRightBorder = self._buttonFreeEnergy:sourceView().x + self._buttonFreeEnergy:realWidth() / 2
+        --need correct button free currency energy
+        local targetWidth = buttonRightBorder - viewRightBorder
+        
+        local targetScale =targetWidth / self._buttonFreeEnergy:realWidth() 
+        
+        self._buttonFreeEnergy:sourceView().xScale = self._buttonFreeEnergy:sourceView().xScale * targetScale
+        self._buttonFreeEnergy:sourceView().yScale = self._buttonFreeEnergy:sourceView().xScale
+        
+        self._buttonFreeEnergy:sourceView().x = self._buttonShop:sourceView().x - self._buttonShop:realWidth() / 2 - self._buttonFreeEnergy:realWidth() / 2 - 5 
+        self._buttonFreeEnergy:sourceView().y = self._buttonShop:sourceView().y
+    end
+    
+    
     ViewBase.placeViews(self)
 end
 
