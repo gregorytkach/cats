@@ -69,9 +69,6 @@ function ViewPopupGameOver.cleanup(self)
     self._lavelEnergy:cleanup()
     self._lavelEnergy = nil
     
-    self._buttonClose:cleanup()
-    self._buttonClose = nil
-    
     ViewPopupCatsBase.cleanup(self)
 end
 

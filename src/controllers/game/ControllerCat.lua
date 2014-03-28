@@ -32,19 +32,19 @@ function ControllerCat.onCreated(self, offsetY, delay)
     self._source.y = self._source.y - offsetY
     
     local delay         =  delay
-    local timeInterval  =  Constants.CHANGE_CELL_TIME
+    local timeInterval  =  Constants.CHANGE_CELL_TIME / 2
     
-    local point =
+    local tweenParams =
     {
-        x       = self._source.x,
-        y       = yOriginal,
-        delay   = delay,
-        time    = timeInterval,
-        transition  = ControllerCat.easeOutBounce,
+        x           = self._source.x,
+        y           = yOriginal,
+        delay       = delay,
+        time        = timeInterval,
+        transition  = ControllerCat.easeOutBounce
     }
     
     self._source:toFront()
-    self:setPosition(point)
+    self:setPosition(tweenParams)
     
 end
 
@@ -170,10 +170,15 @@ function ControllerCat.update(self, updateType)
         local cell      = self._cells[row][column]
         local cellView  = cell:controller():view():sourceView()
         
-        cellView.delay = 0
-        cellView.time =  Constants.CHANGE_CELL_TIME
+        local tweenParams = 
+        {
+            delay   = 0,
+            time    = Constants.CHANGE_CELL_TIME,
+            x       = cellView.x,
+            y       = cellView.y
+        }
         
-        self:setPosition(cellView)
+        self:setPosition(tweenParams)
         
     elseif(updateType == EControllerUpdate.ECUT_NEED_REMOVE)then 
         
@@ -186,10 +191,11 @@ function ControllerCat.update(self, updateType)
 end
 
 function ControllerCat.easeOutBounce(t, tMax, start, delta)
-    return start + (delta * (t / tMax)) * (0.8 + 0.2 * t / tMax + 0.1 * math.sin((t - tMax) / 10))   -- ControllerCat.easeOutBounceRatio(t / tMax))
+    return easing.linear(t, tMax, start, delta)
+    --    return start + (delta * (t / tMax)) * (0.8 + 0.2 * t / tMax + 0.1 * math.sin((t - tMax) / 10))   -- ControllerCat.easeOutBounceRatio(t / tMax))
 end
 
-function ControllerCat.setPosition(self, point)
+function ControllerCat.setPosition(self, tweenParams)
     
     local source = self._view:sourceView()
     
@@ -201,11 +207,11 @@ function ControllerCat.setPosition(self, point)
     
     local tweenParams =
     {
-        delay       = point.delay,
-        time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
-        x           = point.x,
-        y           = point.y,
-        --transition  = ControllerCat.easeOutBounce,  -- GameInfo:instance():managerStates():easingProvider().easeOutBounce,
+        delay       = tweenParams.delay,
+        time        = tweenParams.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
+        x           = tweenParams.x,
+        y           = tweenParams.y,
+        transition  = tweenParams.transition,
         onComplete  = 
         function ()
             
@@ -226,10 +232,6 @@ function ControllerCat.setPosition(self, point)
             
         end,
     }
-    
-    if point.transition ~= nil then
-        tweenParams.transition = point.transition
-    end
     
     self._tweenMove = transition.to(source, tweenParams)  
     

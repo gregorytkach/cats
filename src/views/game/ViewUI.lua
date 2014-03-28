@@ -26,9 +26,9 @@ end
 --    return self._buttonFreeEnergy
 --end
 --
---function ViewUI.buttonShop(self)
---    return self._buttonShop
---end
+function ViewUI.buttonExit(self)
+    return self._buttonExit
+end
 
 --
 -- Methods
@@ -41,8 +41,8 @@ function ViewUI.init(self, params)
     
     local managerResources = GameInfo:instance():managerResources()
     
-    self._buttonPause      = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_PAUSE))
-    self._sourceView:insert(self._buttonPause:sourceView())
+    self._buttonExit      = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_EXIT))
+    self._sourceView:insert(self._buttonExit:sourceView())
     
     self._viewTurns        = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_VIEW_TURNS))
     
@@ -82,11 +82,11 @@ function ViewUI.placeViews(self)
     self._viewPurchases:sourceView().x = display.contentCenterX
     self._viewPurchases:sourceView().y = application.margin_top + self._viewPurchases:realHeight() / 2
     
-    self._buttonPause:sourceView().xScale = self._buttonPause:sourceView().xScale * scaleWidth
-    self._buttonPause:sourceView().yScale = self._buttonPause:sourceView().xScale
+    self._buttonExit:sourceView().xScale = self._buttonExit:sourceView().xScale * scaleWidth
+    self._buttonExit:sourceView().yScale = self._buttonExit:sourceView().xScale
     
-    self._buttonPause:sourceView().x = application.margin_right - self._buttonPause:realWidth() * 0.6
-    self._buttonPause:sourceView().y = application.margin_top + self._buttonPause:realHeight() / 2
+    self._buttonExit:sourceView().x = application.margin_right  - self._buttonExit:realWidth() * 0.6
+    self._buttonExit:sourceView().y = application.margin_top    + self._buttonExit:realHeight() / 2
     
     self._viewTurns:sourceView().xScale = self._viewTurns:sourceView().xScale * scaleWidth
     self._viewTurns:sourceView().yScale = self._viewTurns:sourceView().xScale
@@ -115,8 +115,8 @@ function ViewUI.cleanup(self)
     self._sourceView:removeSelf()
     self._sourceView = nil
     
-    self._buttonPause:cleanup()
-    self._buttonPause = nil
+    self._buttonExit:cleanup()
+    self._buttonExit = nil
     
     self._viewTurns:cleanup()
     self._viewTurns = nil

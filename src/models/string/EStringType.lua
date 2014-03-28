@@ -13,11 +13,6 @@ EStringType =
     ["EST_POPUP_WIN_TEXT"]                  = "EST_POPUP_WIN_TEXT";
     ["EST_POPUP_WIN_BUTTON_CLOSE"]          = "EST_POPUP_WIN_BUTTON_CLOSE";
     
-    --pause
-    ["EST_POPUP_PAUSE_TITLE"]               = "EST_POPUP_PAUSE_TITLE";
-    ["EST_POPUP_PAUSE_BUTTON_CLOSE"]        = "EST_POPUP_PAUSE_BUTTON_CLOSE";
-    ["EST_POPUP_PAUSE_BUTTON_REPLAY"]       = "EST_POPUP_PAUSE_BUTTON_REPLAY";
-    
     --shop
     ["EST_POPUP_SHOP_BUTTON_CLOSE"]         = "EST_POPUP_SHOP_BUTTON_CLOSE";
     ["EST_POPUP_SHOP_TITLE"]                = "EST_POPUP_SHOP_TITLE";

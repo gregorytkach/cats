@@ -22,7 +22,6 @@ require('game_cats.src.models.game.ManagerGame')
 
 require('game_cats.src.controllers.popups.game_over.ControllerPopupGameOver')
 require('game_cats.src.controllers.popups.win.ControllerPopupWin')
-require('game_cats.src.controllers.popups.pause.ControllerPopupPause')
 require('game_cats.src.controllers.popups.shop.ControllerPopupShop')
 
 
@@ -61,7 +60,7 @@ function GameInfo.onGameStartComplete(self, response)
     self._managerBonusEnergy:deserialize(getManagerBonusEnergy())
     self._managerPurchases:deserialize(getManagerPurchasesData())
     
-    --    self._managerStates:setState(EStateType.EST_MAP)
+--    self._managerStates:setState(EStateType.EST_MAP)
     
     local paramsGame = 
     {

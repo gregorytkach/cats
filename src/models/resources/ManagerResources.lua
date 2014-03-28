@@ -34,7 +34,7 @@ function ManagerResources.init(self)
     
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_CAT]                  = "%sstate_game/cats/cat_%s/%s/cat_"
     
-    self._resources[EResourceType.ERT_STATE_GAME_BUTTON_PAUSE]              = "%sstate_game/ui/button_pause/%s%s.png"
+    self._resources[EResourceType.ERT_STATE_GAME_BUTTON_EXIT]              = "%sstate_game/ui/button_exit/%s%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_VIEW_TURNS]                = "%sstate_game/ui/view_turns/view_turns%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_BUY]                = ""
     
@@ -86,8 +86,6 @@ function ManagerResources.getPopupBackground(self, type)
         result = '%spopup_game_over/background/background%s.png'
     elseif (type == EPopupType.EPT_BONUS) then
         result = '%spopup_bonus/background/background%s.png'
-    elseif(type == EPopupType.EPT_PAUSE)then
-        result = '%spopup_pause/background/background%s.png'
     elseif(type == EPopupType.EPT_SHOP)then
         result = '%spopup_shop/background/background%s.png'
     else
@@ -142,7 +140,7 @@ function ManagerResources.initAnimations(self)
             name    = "default",
             start   = 1,
             count   = 10,
-            time    = 2 * Constants.CHANGE_CELL_TIME,
+            time    = 4 * application.animation_duration,
         }
     }
     self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_CAT]       = "%sstate_game/cats/cat_%s/spritesheet%s.png"

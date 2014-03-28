@@ -88,9 +88,6 @@ function ViewPopupWin.cleanup(self)
     self._labelTilesCount:cleanup()
     self._labelTilesCount = nil
     
-    self._buttonClose:cleanup()
-    self._buttonClose = nil
-    
     ViewPopupCatsBase.cleanup(self)
     
 end

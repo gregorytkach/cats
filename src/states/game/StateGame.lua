@@ -76,7 +76,6 @@ function StateGame.initLayerPopups(self)
     self:registerPopup(ControllerPopupShop:new())
     self:registerPopup(ControllerPopupWin:new())
     self:registerPopup(ControllerPopupGameOver:new())
-    self:registerPopup(ControllerPopupPause:new())
     
 end
 
@@ -121,7 +120,6 @@ function StateGame.placeViews(self)
     local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
     
     self:setMaxPopupWidth(popupWidthMax)
-    
     
 end
 

@@ -38,22 +38,24 @@ function ViewPurchases.init(self, params)
     self._sourceView = display.newGroup()
     
     local managerResources = GameInfo:instance():managerResources()
-   
+    
     self._buttonShuffle = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_SHUFFLE))
     
     self._buttonRemoveBottomRow = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_REMOVE_BOTTOM_ROW))
     
     self._buttonRemove9Cells = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_REMOVE_9_CELLS))
     
-    
     --todo: rewrite '0'
-        
-    self._labelCountRemove9Cells = self:createLabel('0', EFontType.EFT_2)
-
-    self._labelCountRemoveBottomRow = self:createLabel('0', EFontType.EFT_2)
-  
-    self._labelCountShuffle = self:createLabel('0', EFontType.EFT_2)
-   
+    
+    self._labelCountRemove9Cells    = self:createLabel('0', EFontType.EFT_0)
+    self._labelCountRemove9Cells:sourceView():setColor(0,0,0)
+    
+    self._labelCountRemoveBottomRow = self:createLabel('0', EFontType.EFT_0)
+    self._labelCountRemoveBottomRow:sourceView():setColor(0,0,0)
+    
+    self._labelCountShuffle         = self:createLabel('0', EFontType.EFT_0)
+    self._labelCountShuffle:sourceView():setColor(0,0,0)
+    
 end
 
 function ViewPurchases.placeViews(self)

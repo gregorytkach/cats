@@ -53,11 +53,6 @@ function ManagerString.initLanguageEnglish(self)
     language[EStringType.EST_POPUP_WIN_BUTTON_CLOSE]        = 'NEXT'
     language[EStringType.EST_POPUP_WIN_TEXT]                = 'COLLECTED TILES:'
     
-    --pause
-    language[EStringType.EST_POPUP_PAUSE_TITLE]             = 'PAUSE' 
-    language[EStringType.EST_POPUP_PAUSE_BUTTON_CLOSE]      = 'CONTINUE'
-    language[EStringType.EST_POPUP_PAUSE_BUTTON_REPLAY]     = 'REPLAY'
-    
     --shop
     language[EStringType.EST_POPUP_SHOP_TITLE]              = 'SHOP'
     language[EStringType.EST_POPUP_SHOP_BUTTON_CLOSE]       = 'CLOSE'

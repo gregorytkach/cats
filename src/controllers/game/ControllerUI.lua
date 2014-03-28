@@ -18,6 +18,15 @@ function ControllerUI.onViewClicked(self, target, event)
     
     if(not result)then
         
+        if(target == self._view:buttonExit())then
+            
+            GameInfo:instance():onGameEnd()
+            GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
+            
+        else
+            assert(false)
+        end
+        
     end
     
     return result
