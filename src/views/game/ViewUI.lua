@@ -22,6 +22,13 @@ function ViewUI.setViewProgress(self, value)
     
 end
 
+function ViewUI.setTurns(self, value)
+    assert(value ~= nil)
+    
+    self._labelTurnsCount:sourceView():setText(value)
+end
+
+
 --function ViewUI.buttonFreeEnergy(self)
 --    return self._buttonFreeEnergy
 --end
@@ -48,16 +55,16 @@ function ViewUI.init(self, params)
     
     self._buttonBuy = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_BUY))
     
-    self._labelCountMotion = self:createLabel('0', EFontType.EFT_2)
+    self._labelTurnsCount = self:createLabel('0', EFontType.EFT_2)
     
     
 end
 
 function ViewUI.placeViews(self)
-
+    
     
     local widthMax = (application.content.width - display.screenOriginX * 2) - 10
-     
+    
     
     self._viewProgress:placeViews()
     
@@ -100,11 +107,11 @@ function ViewUI.placeViews(self)
     self._buttonBuy:sourceView().x = self._viewTurns:sourceView().x + self._viewTurns:realWidth() * 0.3
     self._buttonBuy:sourceView().y = self._viewTurns:sourceView().y + self._viewTurns:realHeight() * 0.3
     
-    self._labelCountMotion:sourceView().xScale = self._labelCountMotion:sourceView().xScale * scaleWidth
-    self._labelCountMotion:sourceView().yScale = self._labelCountMotion:sourceView().xScale
+    self._labelTurnsCount:sourceView().xScale = self._labelTurnsCount:sourceView().xScale * scaleWidth
+    self._labelTurnsCount:sourceView().yScale = self._labelTurnsCount:sourceView().xScale
     
-    self._labelCountMotion:sourceView().x = self._viewTurns:sourceView().x
-    self._labelCountMotion:sourceView().y = self._viewTurns:sourceView().y
+    self._labelTurnsCount:sourceView().x = self._viewTurns:sourceView().x
+    self._labelTurnsCount:sourceView().y = self._viewTurns:sourceView().y
     
     ViewBase.placeViews(self)
     
@@ -124,8 +131,8 @@ function ViewUI.cleanup(self)
     self._buttonBuy:cleanup()
     self._buttonBuy = nil
     
-    self._labelCountMotion:cleanup()
-    self._labelCountMotion = nil
+    self._labelTurnsCount:cleanup()
+    self._labelTurnsCount = nil
     
     ViewBase.cleanup(self)
 end

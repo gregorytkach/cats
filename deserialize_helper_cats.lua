@@ -49,6 +49,10 @@ function getManagerLevels()
     table.insert(levels, getLevel0Data(false))
     table.insert(levels, getLevel0Data(false))
     
+    for i, level in ipairs(levels)do
+        level.number = i
+    end
+    
     local levelContainer0 = 
     {
         levels          = levels,
@@ -203,7 +207,7 @@ function getLevel0Data(isComplete)
         rows                    = 9,
         columns                 = 9,
         
-        turns_limit             = 50,
+        turns_limit             = 10,
         
         star_points_1           = 100,
         star_points_2           = 200,

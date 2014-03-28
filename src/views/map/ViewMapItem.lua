@@ -38,6 +38,12 @@ function ViewMapItem.button(self)
     return self._button
 end
 
+function ViewMapItem.setNumber(self, value)
+    assert(value ~= nil)
+    
+    self._labelNumber:sourceView():setText(value)
+end
+
 --
 -- Methods
 --
@@ -51,7 +57,8 @@ function ViewMapItem.init(self, params)
     
     local managerResources = GameInfoBase:instance():managerResources()
     
-    self._button = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_MAP_BUTTON_ITEM))
+    self._button        = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_MAP_BUTTON_ITEM))
+    self._labelNumber   = self:createLabel("0", EFontType.EFT_1)
     
     self._viewStars = {}
     
@@ -61,15 +68,18 @@ function ViewMapItem.init(self, params)
         local viewStar = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_ICON_STAR))
         
         table.insert(self._viewStars, viewStar) 
---        viewStar.isVisible = false
+        --        viewStar.isVisible = false
         
         i = i + 1
     end
--- todo: for change position
---    self._circle = display.newCircle(0, 0, self._button:realWidth() / 2)
---    self._sourceView:insert(self._circle)
---    self._circle:addEventListener('touch', self)
---    self._button:sourceView().isVisible = false
+    
+    
+    
+    -- todo: for change position
+    --    self._circle = display.newCircle(0, 0, self._button:realWidth() / 2)
+    --    self._sourceView:insert(self._circle)
+    --    self._circle:addEventListener('touch', self)
+    --    self._button:sourceView().isVisible = false
 end
 
 function ViewMapItem.animateIcon(self, delay)
@@ -141,6 +151,10 @@ function ViewMapItem.placeViews(self)
     
     self._button:sourceView().x = 0
     self._button:sourceView().y = 0
+    
+    self._labelNumber:sourceView().y = -self:realHeight() / 2 -  self._labelNumber:realHeight() / 2
+    self._labelNumber:sourceView().x = 0
+    
 end
 
 function ViewMapItem.getParamsTweenShow(self, time, callback)

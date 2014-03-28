@@ -103,6 +103,17 @@ function StateGame.update(self, updateType)
         --do nothing
     elseif(updateType == EControllerUpdate.ECUT_BONUS_DOG)then
         self._controllerState:controllerGrid():update(updateType)
+    elseif(updateType == EControllerUpdate.ECUT_TURNS_COUNT)then
+        
+        self._controllerUI:update(updateType)
+        
+    elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
+        
+        if(self._managerGame:isPlayerWin())then
+        else
+           self:showPopup(EPopupType.EPT_GAME_OVER) 
+        end
+        
     else
         assert(false, updateType)
     end

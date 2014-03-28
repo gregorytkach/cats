@@ -152,7 +152,7 @@ function ManagerResources.initAnimations(self)
             name    = "default",
             start   = 1,
             count   = 19,
-            time    = 2 * application.animation_duration,
+            time    = 4 * application.animation_duration,
         }
     }
     

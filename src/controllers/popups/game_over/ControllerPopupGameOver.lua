@@ -10,6 +10,24 @@ function ControllerPopupGameOver.getType(self)
     return EPopupType.EPT_GAME_OVER
 end
 
+function ControllerPopupGameOver.onViewClicked(self, target)
+    local result = false
+    
+    
+    if(target == self._view:buttonClose())then
+        
+        GameInfo:instance():onGameEnd()
+        GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
+        
+    else
+        assert(false)
+    end
+    
+    
+    return result
+end
+
+
 --
 -- Methods
 --

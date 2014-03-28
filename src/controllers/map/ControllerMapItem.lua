@@ -66,7 +66,7 @@ function ControllerMapItem.init(self, params)
         self._view:button():setIsEnabled(false)
     end
     
-   
+    self._view:setNumber(self._entry:number())
     
 end
 

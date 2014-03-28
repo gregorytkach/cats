@@ -47,6 +47,8 @@ function ControllerUI.init(self)
     
     Controller.init(self, paramsController)
     
+    self._managerGame = GameInfo:instance():managerGame()
+    
     self._controllerPurchases = ControllerPurchases:new()
     self._view:setViewPurchases(self._controllerPurchases:view())
     
@@ -54,14 +56,16 @@ function ControllerUI.init(self)
     self._controllerProgress = ControllerProgress:new()
     self._view:setViewProgress(self._controllerProgress:view())
     
-    
-    
-    
+    self:update(EControllerUpdate.ECUT_TURNS_COUNT)
 end
 
 function ControllerUI.update(self, updateType)
     
     if updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY then
+        
+    elseif(updateType == EControllerUpdate.ECUT_TURNS_COUNT)then
+        
+        self._view:setTurns(self._managerGame:turnsLeft())
         
     else
         assert(false)
