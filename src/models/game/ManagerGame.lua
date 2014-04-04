@@ -11,6 +11,10 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --Properties
 --
 
+function ManagerGame.scores(self)
+    return self._scores
+end
+
 function ManagerGame.isCatsComplete(self)
     return self._isCatsComplete
 end
@@ -51,9 +55,7 @@ function ManagerGame.onShuffle(self)
     
     self:shuffle()
     
-    
     self:pushes()
-    
     
 end
 
@@ -115,7 +117,6 @@ function ManagerGame.onRemoveBottomRow(self)
    
    self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
    self._currentState:update(EControllerUpdate.ECUT_TILES)
-   
    
    self:createNewCats()
    self:pushes()
@@ -292,8 +293,6 @@ function ManagerGame.onGameStart(self)
 
                 end
 
-
-
             end
 
             local paramsCat =
@@ -322,11 +321,48 @@ end
 --
 --Methods
 --
+
+function ManagerGame.removeRange(self, indexName, pos, deletes)
+    
+    assert(indexName ~= nil)
+    assert(pos ~= nil)
+    assert(deletes ~= nil)
+    
+    local position  = {}
+    
+    position[indexName] = pos
+
+    local indexNameOther = 'row'
+    local maxCount = self._rowsCount
+
+    if indexName == 'row' then
+
+        indexNameOther = 'column'
+        maxCount = self._columnsCount
+
+    end
+    
+    for i = 1, maxCount, 1 do
+
+        position[indexNameOther] = i
+        local cat = self:catByPosition(position)
+        
+        if table.indexOf(deletes, cat) == nil then
+
+            table.insert(deletes, cat)
+            
+        end
+        
+    end
+    
+    
+    
+end
+
 function ManagerGame.catByPosition(self, position)
 
     assert(position.row     ~= nil)
     assert(position.column  ~= nil)
-
 
     return self._cats[position.row][position.column]
 
@@ -406,10 +442,9 @@ function ManagerGame.push(self)
     if not self._isCatsComplete then
         return
     end
-   
         
     local deletes   = {}
-
+ 
     for typeCat = 0, ECatType.ECT_COUNT - 1, 1 do
 
         for i = 1, self._rowsCount, 1 do
@@ -449,33 +484,75 @@ function ManagerGame.push(self)
         end
 
     end
-
-    if #deletes ~= 0 then
-
+    
+    
+    if #deletes ~= 0  then
+            
         self:foundCombinations(deletes)
+            
+        for _, cat in ipairs(deletes) do
+
+            self:tryBomb(cat, deletes)
+          
+        end
+
         for i = 1, #deletes, 1 do
 
             local cat = deletes[i]
-
-            self._cats[cat:row()][cat:column()] = nil
-
-            cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
-            cat:cleanup()
             
-            self._tiles[cat:row()][cat:column()] = false
+            if cat._newType == nil then
 
+                self._cats[cat:row()][cat:column()] = nil
+               
+            elseif cat._newType == ECatType.ECT_COLOR_BOMB then
+                                                
+                local params =
+                {
+                    type    = cat._newType,
+                    row     = cat:row(),
+                    column  = cat:column(),
+                }
+
+                local newCat = Cat:new(params)
+                self._currentState:controllerGrid():onCatCreatedStatic(newCat)
+                newCat:controller():view():sourceView().isVisible = true
+                self._cats[cat:row()][cat:column()] = newCat
+                
+            elseif cat._newType == ECatType.ECT_ROW_BOMB and cat._bombType == nil then
+                
+                cat:controller():view():setBomb(true)
+                cat._bombType = cat._newType
+                
+            elseif cat._newType == ECatType.ECT_COLUMN_BOMB and cat._bombType == nil then
+                
+                cat:controller():view():setBomb(false)
+                cat._bombType = cat._newType
+                
+             end
+            
+            if cat._newType == nil or cat._newType == ECatType.ECT_COLOR_BOMB then
+                self._tiles[cat:row()][cat:column()] = false
+                cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
+                cat:cleanup()
+            else
+                cat._newType = nil
+            end
+         
         end
+        
         
         self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
         self._currentState:update(EControllerUpdate.ECUT_TILES)
         
         self:createNewCats()
         
-    else
+    else 
 
         timer.cancel(self._timerPush)
         self._timerPush = nil
+        
         self._currentState:unblock() 
+        self._catTo = nil
         
         if not self:foundCanMakeCombination() then
             
@@ -520,7 +597,7 @@ function ManagerGame.createNewCats(self)
                 end
 
                 if not found then
-
+                    
                     local params =
                     {
                         type    = ECatType.randomType(),
@@ -529,16 +606,18 @@ function ManagerGame.createNewCats(self)
                     }
 
                     local cat = Cat:new(params)
-                    self._currentState:onCatCreated(cat)
+                    self._currentState:controllerGrid():onCatCreated(cat)
 
                     self._cats[foundNil][i] = cat
                     lastCreatedCat = cat
+                     
                 end
 
             end
 
         end
-    end    
+    end
+    
     
     if lastCreatedCat ~= nil then
             
@@ -554,6 +633,13 @@ function ManagerGame.createNewCats(self)
 end
 
 function ManagerGame.foundCombination(self, cat, catsCombinations)
+        
+    if table.indexOf(catsCombinations, cat) ~= nil or table.indexOf(catsCombinations[1], cat) == nil then
+        
+        return
+        
+    end
+
 
     table.insert(catsCombinations, cat)
     self._countInCombination = self._countInCombination + 1
@@ -564,7 +650,7 @@ function ManagerGame.foundCombination(self, cat, catsCombinations)
 
        catUp = self._cats[cat:row() + 1][cat:column()]
 
-       if catUp:type() == cat:type() and table.indexOf(catsCombinations, catUp) == nil then
+       if catUp ~= nil and catUp:type() == cat:type()  then
 
            self:foundCombination(catUp, catsCombinations)
 
@@ -578,7 +664,7 @@ function ManagerGame.foundCombination(self, cat, catsCombinations)
 
        catDown = self._cats[cat:row() - 1][cat:column()]
 
-       if catDown:type() == cat:type() and table.indexOf(catsCombinations, catDown) == nil then
+       if catDown ~= nil and catDown:type() == cat:type()  then
 
            self:foundCombination(catDown, catsCombinations)
 
@@ -592,7 +678,7 @@ function ManagerGame.foundCombination(self, cat, catsCombinations)
 
        catRight = self._cats[cat:row()][cat:column() + 1]
 
-       if catRight:type() == cat:type() and table.indexOf(catsCombinations, catRight) == nil then
+       if catRight ~= nil and catRight:type() == cat:type() and table.indexOf(catsCombinations, catRight) == nil then
 
            self:foundCombination(catRight, catsCombinations)
 
@@ -606,7 +692,7 @@ function ManagerGame.foundCombination(self, cat, catsCombinations)
 
        catLeft = self._cats[cat:row()][cat:column() - 1]
 
-       if catLeft:type() == cat:type() and table.indexOf(catsCombinations, catLeft) == nil then
+       if catLeft ~= nil and catLeft:type() == cat:type()  then
 
            self:foundCombination(catLeft, catsCombinations)
 
@@ -616,9 +702,44 @@ function ManagerGame.foundCombination(self, cat, catsCombinations)
 
 end
 
+function ManagerGame.tryBomb(self, cat, deletes)
+    
+    local result = true
+    local indexName = nil
+    local pos
+    
+    if cat._bombType == ECatType.ECT_COLUMN_BOMB then
+            
+        indexName = 'column'
+        pos = cat:column()
+        
+    elseif cat._bombType == ECatType.ECT_ROW_BOMB then
+        
+        indexName = 'row'
+        pos = cat:row()
+        
+    end
+    
+    result = indexName ~= nil
+    
+    if result then
+                       
+        self:removeRange(indexName, pos, deletes)
+        --cat._newType = nil
+        
+    end
+    
+    return result
+    
+end
+
+
+
 function ManagerGame.foundCombinations(self, cats)
 
     local catsCombinations = {}
+    table.insert(catsCombinations, cats)
+    
     for i = 1, #cats, 1 do
 
         local cat = cats[i]
@@ -627,9 +748,56 @@ function ManagerGame.foundCombinations(self, cats)
 
             self._countInCombination = 0
             self:foundCombination(cat, catsCombinations)
-
+            
+            self._scores = self._scores + self._countInCombination
             print(self._countInCombination)
-
+            
+            if self._countInCombination >= 5 then
+                            
+--                local catTo = self._catTo
+--                            
+--                if catTo == nil or (catTo ~= nil and table.indexOf(cats, catTo) == nil) then
+                    local catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
+                --end
+                
+                if cat:type() == catTo:type() then
+             
+                    catTo._newType = ECatType.ECT_COLOR_BOMB 
+                    
+                end
+                
+            elseif self._countInCombination == 4 then
+                
+                local foundCombinationRow    = self:foundChain(cat:type(), 'row',    cat:row() ,  4)
+                local foundCombinationColumn = self:foundChain(cat:type(), 'column', cat:column(),  4)
+                
+                local newType = nil
+                if table.indexOf(foundCombinationRow, cat) ~= nil then
+                                
+                    newType = ECatType.ECT_ROW_BOMB
+                    
+                elseif table.indexOf(foundCombinationColumn, cat) ~= nil then
+                    
+                    newType = ECatType.ECT_COLUMN_BOMB
+                    
+                end
+                
+                --local catTo = self._catTo
+                            
+                --if catTo == nil or (catTo ~= nil and table.indexOf(cats, catTo) == nil) then
+                    local catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
+                --end
+                
+                if cat:type() == catTo:type() then
+             
+                    catTo._newType = newType 
+                    
+                end
+                
+            end
+            
+            self._currentState:update(EControllerUpdate.ECUT_SCORES) 
+            
         end
 
     end
@@ -638,6 +806,12 @@ function ManagerGame.foundCombinations(self, cats)
 end
 
 function ManagerGame.pushes(self)
+    
+    if self._timerPush ~= nil then
+            
+        return
+        
+    end
     
     self._currentState:block()
 
@@ -664,34 +838,122 @@ function ManagerGame.tryChangeTo(self, catTo)
 
     local rowTo         = catTo:row()
     local columnTo      = catTo:column()
-
-
-    if self:canMakeCombination(catFrom, catTo) or self:canMakeCombination(catTo, catFrom) then
-
-        catFrom:setPosition(rowTo, columnTo)
-        catTo:setPosition(rowFrom, columnFrom)
+    
+    if catFrom:type() < ECatType.ECT_COUNT and catTo:type() < ECatType.ECT_COUNT then
+            
+        local canFromTo = self:canMakeCombination(catFrom, catTo)
+        local canToFrom = false
         
-        self:pushes()
+        if not canFromTo then
+            canToFrom = self:canMakeCombination(catTo, catFrom)
+        end
+        
+        if canFromTo or canToFrom then
 
-        self:setFocusCat(nil)
+            catFrom:setPosition(rowTo, columnTo)
+            catTo:setPosition(rowFrom, columnFrom)
+            
+            if canFromTo then
+                self._catTo = catTo
+            elseif canToFrom then
+                self._catTo = catFrom
+            end
+                                
+            self:pushes()
+ 
+            self:setFocusCat(nil)
 
-    else
+        else
 
+            catFrom:setPosition(rowTo, columnTo)
+            catTo:setPosition(rowFrom, columnFrom)
 
-        catFrom:setPosition(rowTo, columnTo)
-        catTo:setPosition(rowFrom, columnFrom)
+            self._timerChangeCell = timer.performWithDelay(Constants.CHANGE_CELL_TIME,
+            function ()
+                self._timerChangeCell = nil
 
-        self._timerChangeCell = timer.performWithDelay(Constants.CHANGE_CELL_TIME,
-        function ()
-            self._timerChangeCell = nil
+                catFrom:setPosition(rowFrom, columnFrom)
+                catTo:setPosition(rowTo, columnTo)
+            end,
+            1)
 
-            catFrom:setPosition(rowFrom, columnFrom)
-            catTo:setPosition(rowTo, columnTo)
-        end,
-        1)
+            --self._catTo = nil
 
+        end
+        
+    elseif (catFrom:type() == ECatType.ECT_COLOR_BOMB and catTo:type() < ECatType.ECT_COUNT) 
+        or (catTo:type() == ECatType.ECT_COLOR_BOMB and catFrom:type() < ECatType.ECT_COUNT) then
+        
+            catFrom:setPosition(rowTo, columnTo)
+            catTo:setPosition(rowFrom, columnFrom)
+            
+            local catBomb
+            
+            if catFrom:type() == ECatType.ECT_COLOR_BOMB then
+                            
+                catBomb = catFrom
+                catBomb._bombType = catTo:type()
+                
+            else
+                
+                catBomb = catTo
+                catBomb._bombType = catFrom:type()
+                
+            end
+            
+            self._timerChangeCell = timer.performWithDelay(Constants.CHANGE_CELL_TIME,
+            function ()
+                self._timerChangeCell = nil
+
+                self:deleteCatsByColorBomb(catBomb)
+            end,
+            1)
+            
+        elseif (catFrom:type() == ECatType.ECT_COLOR_BOMB) and (catFrom:type() == catTo:type() ) then 
+            
+            catFrom:setPosition(rowTo, columnTo)
+            catTo:setPosition(rowFrom, columnFrom)
+
+            self._timerChangeCell = timer.performWithDelay(Constants.CHANGE_CELL_TIME,
+            function ()
+                self._timerChangeCell = nil
+
+                catFrom:setPosition(rowFrom, columnFrom)
+                catTo:setPosition(rowTo, columnTo)
+            end,
+            1)
+
+            --self._catTo = nil
+            
     end
 
+end
+
+
+function ManagerGame.deleteCatsByColorBomb(self, value)
+    
+    assert(value ~= nil)
+    for row = 1, self._rowsCount, 1 do
+        for column = 1, self._columnsCount, 1 do
+                    
+            local cat = self._cats[row][column]
+            if cat:type() == value._bombType or cat == value then
+                            
+                self._tiles[cat:row()][cat:column()] = false
+                cat:controller():update(EControllerUpdate.ECUT_NEED_REMOVE)
+                cat:cleanup()
+                self._cats[row][column] = nil
+                
+            end
+            
+        end
+    end
+    
+    self._currentState:update(EControllerUpdate.ECUT_NEED_REMOVE)
+    self._currentState:update(EControllerUpdate.ECUT_TILES)
+    self:createNewCats()
+    self:pushes()
+    
 end
 
 function ManagerGame.init(self, params)
@@ -818,10 +1080,11 @@ function ManagerGame.canMakeCombination(self, catFrom, catTo)
     local foundCombinationRow    = self:foundChain(catFrom:type(), 'row',      rowTo ,     3)
     local foundCombinationColumn = self:foundChain(catFrom:type(), 'column',   columnTo,  3)
 
-    local isCombinationFoundHorizontal = table.indexOf(foundCombinationRow, catFrom) ~= nil
-    local isCombinationFoundVertical   = table.indexOf(foundCombinationColumn, catFrom) ~= nil
-
-    result = isCombinationFoundHorizontal or isCombinationFoundVertical
+    local isCombinationFoundRow = table.indexOf(foundCombinationRow, catFrom) ~= nil
+    local isCombinationFoundColumn   = table.indexOf(foundCombinationColumn, catFrom) ~= nil
+    
+    
+    result = isCombinationFoundRow or isCombinationFoundColumn
 
     if not result then
 

@@ -34,6 +34,7 @@ function ControllerCat.onCreated(self, offsetY, delay)
     local delay         =  delay
     local timeInterval  =  Constants.CHANGE_CELL_TIME
     
+    self._timerVisible = timer.performWithDelay(delay, function () self._source.isVisible = true end, 1)
     local point =
     {
         x       = self._source.x,
@@ -205,7 +206,6 @@ function ControllerCat.setPosition(self, point)
         time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
         x           = point.x,
         y           = point.y,
-        --transition  = ControllerCat.easeOutBounce,  -- GameInfo:instance():managerStates():easingProvider().easeOutBounce,
         onComplete  = 
         function ()
             
@@ -227,10 +227,6 @@ function ControllerCat.setPosition(self, point)
         end,
     }
     
-    if point.transition ~= nil then
-        tweenParams.transition = point.transition
-    end
-    
     self._tweenMove = transition.to(source, tweenParams)  
     
 end
@@ -249,6 +245,11 @@ end
 function ControllerCat.cleanup(self)
     
     self:cleanupTweenMove()
+    
+    if self._timerVisible ~= nil then
+        timer.cancel(self._timerVisible)
+        self._timerVisible = nil
+    end
     
     Runtime:removeEventListener("touch", self)
     

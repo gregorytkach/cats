@@ -13,16 +13,7 @@ ControllerGrid = classWithSuper(Controller, 'ControllerGrid')
 function ControllerGrid.onCatCreated(self, cat)
     
     
-    local paramsController = 
-    {
-        entry = cat 
-    }
-    
-    local controllerCat = ControllerCat:new(paramsController)
-    table.insert(self._controllersCats, controllerCat)
-    
-    cat:setController(controllerCat)
-    self._view:onCreatedCat(controllerCat)
+    local controllerCat = self:onCatCreatedStatic(cat)
     
     local offset = controllerCat:view():realHeight() * #self._controllersCells 
     
@@ -36,10 +27,25 @@ function ControllerGrid.onCatCreated(self, cat)
     
     controllerCat:onCreated(offset, self._delay)
     
-    
-    
 end
 
+function ControllerGrid.onCatCreatedStatic(self, cat)
+    
+    
+    local paramsController = 
+    {
+        entry = cat 
+    }
+    
+    local controllerCat = ControllerCat:new(paramsController)
+    table.insert(self._controllersCats, controllerCat)
+    
+    cat:setController(controllerCat)
+    self._view:onCreatedCat(controllerCat)
+    
+    return controllerCat
+    
+end
 --
 --Properties
 --
@@ -199,11 +205,21 @@ function ControllerGrid.update(self, updateType)
         
         local offset = self._view:realHeight()
         
+        local delay = 0
         for i, controllerCat in ipairs(self._controllersCats)do
-                
-            controllerCat:onCreated(offset, (controllerCat:entry():column() - 1) * Constants.CHANGE_CELL_TIME )
+            delay = (controllerCat:entry():column() - 1) * Constants.CHANGE_CELL_TIME    
+            controllerCat:onCreated(offset,  delay)
                 
         end
+        
+        delay = delay + Constants.CHANGE_CELL_TIME
+   
+        self._timerUblock = timer.performWithDelay(delay, 
+        function ()
+            self._managerGame._timerPush = nil
+            GameInfo:instance():managerStates():currentState():unblock()
+        end, 
+        1)
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -273,8 +289,13 @@ function ControllerGrid.cleanup(self)
     
     if self._timerBonusDog ~= nil then
         timer.cancel(self._timerBonusDog)
+        self._timerBonusDog = nil
     end
     
+    if self._timerUnblock ~= nil then
+        timer.cancel(self._timerUnblock)
+        self._timerUnblock = nil
+    end
     
     for i = #self._bottomRow, 1, -1 do
         table.remove(self._bottomRow, i)

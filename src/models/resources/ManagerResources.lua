@@ -46,7 +46,7 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_STATE_GAME_PROGRESS_BAR]              = "%sstate_game/ui/view_progress/progress_bar/progress_bar%s.png"
     self._resources[EResourceType.ERT_STATE_GAME_ICON_STAR]                 = "%sstate_game/ui/view_progress/icon_star/icon_star%s.png"
     
-    
+    self._resources[EResourceType.ERT_STATE_GAME_COLOR_BOMB]                = "%sstate_game/cats/color_bomb%s.png"
     
     --popup game over
     
@@ -173,5 +173,12 @@ function ManagerResources.initAnimations(self)
     
     self._resources[EResourceType.ERT_POPUP_WIN_ANIMATION_CAT]       = "%spopup_win/animation/spritesheet%s.png"
     self._animations[EResourceType.ERT_POPUP_WIN_ANIMATION_CAT]      = popupGameOverAnimationCat
+    
+end
+
+function ManagerResources.getResource(self, value)
+    
+    assert(value ~= nil)
+    return self._resources[value]
     
 end

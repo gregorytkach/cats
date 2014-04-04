@@ -19,11 +19,11 @@ end
 --Events
 --
 
-function StateGame.onCatCreated(self, cat)
-    
-    self._controllerState:controllerGrid():onCatCreated(cat)
-    
+function StateGame.controllerGrid(self)
+    return self._controllerState:controllerGrid()
 end
+
+
 
 --
 -- Methods
@@ -86,6 +86,8 @@ function StateGame.update(self, updateType)
         
         self._managerGame:onGameStart()
         self._controllerState:controllerGrid():update(updateType)
+        self:block()
+        self._managerGame._timerPush = 1
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -104,6 +106,10 @@ function StateGame.update(self, updateType)
         --do nothing
     elseif(updateType == EControllerUpdate.ECUT_BONUS_DOG)then
         self._controllerState:controllerGrid():update(updateType)
+    elseif(updateType == EControllerUpdate.ECUT_SCORES) then
+        
+        self._controllerUI:controllerProgress():update(updateType)
+        
     else
         assert(false, updateType)
     end

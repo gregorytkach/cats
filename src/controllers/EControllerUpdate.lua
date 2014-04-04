@@ -6,5 +6,6 @@ EControllerUpdate =
     ["ECUT_CHANGE_POSITION"]                  = "ECUT_CHANGE_POSITION";
     ["ECUT_TILES"]                            = "ECUT_TILES";
     ["ECUT_BONUS_DOG"]                        = "ECUT_BONUS_DOG"; 
+    ["ECUT_SCORES"]                           = "ECUT_SCORES"; 
 }
 

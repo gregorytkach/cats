@@ -9,6 +9,11 @@ ControllerUI = classWithSuper(Controller, 'ControllerUI')
 -- Properties
 --
 
+function ControllerUI.controllerProgress(self)
+    
+    return self._controllerProgress
+    
+end
 
 --
 --Events
@@ -44,8 +49,6 @@ function ControllerUI.init(self)
     
     self._controllerProgress = ControllerProgress:new()
     self._view:setViewProgress(self._controllerProgress:view())
-    
-    
     
     
 end

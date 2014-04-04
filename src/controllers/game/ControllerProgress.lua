@@ -38,6 +38,10 @@ end
 function ControllerProgress.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
+    elseif(updateType == EControllerUpdate.ECUT_SCORES)then
+        
+        local scores = GameInfo:instance():managerGame():scores()
+        self:view():progressSize(scores / Constants.MAX_SCORES_COUNT)
         
     else
         assert(false)
