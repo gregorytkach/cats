@@ -578,7 +578,7 @@ function ManagerGame.createNewCats(self)
 
             local catFoundNil = self._cats[foundNil][i]
 
-            if catFoundNil == nil then --and self._cells[catFoundNil][i] ~= ECellType.ECLT_EMPTY then
+            if catFoundNil == nil then 
 
                 local found = false
 
@@ -728,7 +728,6 @@ function ManagerGame.tryBomb(self, cat, deletes)
     if result then
                        
         self:removeRange(indexName, pos, deletes)
-        --cat._newType = nil
         
     end
     
@@ -757,31 +756,8 @@ function ManagerGame.foundCombinations(self, cats)
             
             if self._countInCombination >= 5 then
                             
-                local catTo = nil
+                self:addNewType(cat, catsCombinations, ECatType.ECT_COLOR_BOMB )
                 
-                for i = 1, self._countInCombination, 1 do
-                    
-                    local _cat = catsCombinations[#catsCombinations - i + 1]
-                    if table.indexOf(self._movedCats, _cat) ~= nil then
-                                            
-                        catTo = _cat
-                        break
-                        
-                    end
-                    
-                end
-                
-                if catTo == nil then
-
-                    catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
-                    
-                end
-                
-                if cat:type() == catTo:type() then
-             
-                    catTo._newType = ECatType.ECT_COLOR_BOMB 
-                    
-                end
                 
             elseif self._countInCombination == 4 then
                 
@@ -799,35 +775,43 @@ function ManagerGame.foundCombinations(self, cats)
                     
                 end
                 
-                local catTo = nil
-                for i = 1, self._countInCombination, 1 do
-                    
-                    local _cat = catsCombinations[#catsCombinations - i + 1]
-                    if table.indexOf(self._movedCats, _cat) ~= nil then
-                                            
-                        catTo = _cat
-                        break
-                        
-                    end
-                    
-                end
-                
-                if catTo == nil then
-                    catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
-                end
-                
-                
-                if cat:type() == catTo:type() then
-             
-                    catTo._newType = newType 
-                    
-                end
+                self:addNewType(cat, catsCombinations, newType)
                 
             end
+            
+            
             
             self._currentState:update(EControllerUpdate.ECUT_SCORES) 
             
         end
+
+    end
+
+
+end
+
+function ManagerGame.addNewType(self, cat, catsCombinations, newType)
+    local catTo = nil
+    for i = 1, self._countInCombination, 1 do
+
+        local _cat = catsCombinations[#catsCombinations - i + 1]
+        if table.indexOf(self._movedCats, _cat) ~= nil then
+
+            catTo = _cat
+            break
+
+        end
+
+    end
+
+    if catTo == nil then
+        catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
+    end
+
+
+    if cat:type() == catTo:type() then
+
+        catTo._newType = newType 
 
     end
 
