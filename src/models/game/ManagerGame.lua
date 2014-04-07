@@ -490,6 +490,9 @@ function ManagerGame.push(self)
             
         self:foundCombinations(deletes)
             
+        self._movedCats[1] = nil
+        self._movedCats[2] = nil
+        
         for _, cat in ipairs(deletes) do
 
             self:tryBomb(cat, deletes)
@@ -552,7 +555,7 @@ function ManagerGame.push(self)
         self._timerPush = nil
         
         self._currentState:unblock() 
-        self._catTo = nil
+  
         
         if not self:foundCanMakeCombination() then
             
@@ -754,11 +757,25 @@ function ManagerGame.foundCombinations(self, cats)
             
             if self._countInCombination >= 5 then
                             
---                local catTo = self._catTo
---                            
---                if catTo == nil or (catTo ~= nil and table.indexOf(cats, catTo) == nil) then
-                    local catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
-                --end
+                local catTo = nil
+                
+                for i = 1, self._countInCombination, 1 do
+                    
+                    local _cat = catsCombinations[#catsCombinations - i + 1]
+                    if table.indexOf(self._movedCats, _cat) ~= nil then
+                                            
+                        catTo = _cat
+                        break
+                        
+                    end
+                    
+                end
+                
+                if catTo == nil then
+
+                    catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
+                    
+                end
                 
                 if cat:type() == catTo:type() then
              
@@ -782,11 +799,23 @@ function ManagerGame.foundCombinations(self, cats)
                     
                 end
                 
-                --local catTo = self._catTo
-                            
-                --if catTo == nil or (catTo ~= nil and table.indexOf(cats, catTo) == nil) then
-                    local catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
-                --end
+                local catTo = nil
+                for i = 1, self._countInCombination, 1 do
+                    
+                    local _cat = catsCombinations[#catsCombinations - i + 1]
+                    if table.indexOf(self._movedCats, _cat) ~= nil then
+                                            
+                        catTo = _cat
+                        break
+                        
+                    end
+                    
+                end
+                
+                if catTo == nil then
+                    catTo = catsCombinations[#catsCombinations - math.random(self._countInCombination) + 1]
+                end
+                
                 
                 if cat:type() == catTo:type() then
              
@@ -853,11 +882,8 @@ function ManagerGame.tryChangeTo(self, catTo)
             catFrom:setPosition(rowTo, columnTo)
             catTo:setPosition(rowFrom, columnFrom)
             
-            if canFromTo then
-                self._catTo = catTo
-            elseif canToFrom then
-                self._catTo = catFrom
-            end
+            self._movedCats[1] = catFrom
+            self._movedCats[2] = catTo
                                 
             self:pushes()
  
@@ -877,7 +903,6 @@ function ManagerGame.tryChangeTo(self, catTo)
             end,
             1)
 
-            --self._catTo = nil
 
         end
         
@@ -923,7 +948,6 @@ function ManagerGame.tryChangeTo(self, catTo)
             end,
             1)
 
-            --self._catTo = nil
             
     end
 
@@ -970,6 +994,7 @@ function ManagerGame.init(self, params)
     self._cats   = {}
     self._cells  = {}
     self._tiles  = {}
+    self._movedCats = {}
 
     for rowIndex = 1, self._rowsCount, 1 do
 
