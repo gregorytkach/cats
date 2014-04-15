@@ -44,6 +44,8 @@ function ManagerGame.cats(self)
 end
 
 function ManagerGame.tiles(self)
+    assert(self._tiles ~= nil)
+
     return self._tiles
 end
 
@@ -390,6 +392,7 @@ function ManagerGame.init(self, params)
     self._isCatsComplete = true
     
     self._turnsLeft = self._currentLevel:turnsLimit()
+    
     
 end
 
@@ -1082,12 +1085,17 @@ function ManagerGame.init(self, params)
         local rowTile   = {}
         
         for columnIndex = 1, self._columnsCount, 1 do
+                    
+            table.insert(rowTile, true)
             
         end
+        table.insert(self._tiles, rowTile)
         
     end
     
     self._turnsLeft = self._currentLevel:turnsLimit()
+    
+    self._isCatsComplete = true
     
 end
 

@@ -208,10 +208,10 @@ function ControllerCat.setPosition(self, tweenParams)
     
     local tweenParams =
     {
-        delay       = point.delay,
-        time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
-        x           = point.x,
-        y           = point.y,
+        delay       = tweenParams.delay,
+        time        = tweenParams.time, 
+        x           = tweenParams.x,
+        y           = tweenParams.y,
         onComplete  = 
         function ()
             

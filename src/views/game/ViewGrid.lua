@@ -27,9 +27,9 @@ function ViewGrid.onCreatedTiles(self, tilesViews)
     
     for indexRow, rowTile in ipairs(self._tiles)do
         
-        for indexCell, cellView in ipairs(rowTile)do
+        for indexColumn, tileView in ipairs(rowTile)do
             
-            self._layerTiles:insert(cellView:sourceView())
+            self._layerTiles:insert(tileView:sourceView())
             
         end
     end
@@ -109,8 +109,6 @@ function ViewGrid.placeViews(self)
             tileView:sourceView().y = currentY
             
             currentX = currentX + cellWidth + offsetX 
-            
-            
             
         end
         
