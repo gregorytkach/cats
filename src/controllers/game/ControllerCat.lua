@@ -34,6 +34,7 @@ function ControllerCat.onCreated(self, offsetY, delay)
     local delay         =  delay
     local timeInterval  =  Constants.CHANGE_CELL_TIME / 2
     
+    self._timerVisible = timer.performWithDelay(delay, function () self._source.isVisible = true end, 1)
     local tweenParams =
     {
         x           = self._source.x,
@@ -207,11 +208,10 @@ function ControllerCat.setPosition(self, tweenParams)
     
     local tweenParams =
     {
-        delay       = tweenParams.delay,
-        time        = tweenParams.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
-        x           = tweenParams.x,
-        y           = tweenParams.y,
-        transition  = tweenParams.transition,
+        delay       = point.delay,
+        time        = point.time, --* (math.abs(source.x - point.x) / self._view:realWidth() + math.abs(source.y - point.y) / self._view:realHeight()) ,
+        x           = point.x,
+        y           = point.y,
         onComplete  = 
         function ()
             
@@ -251,6 +251,11 @@ end
 function ControllerCat.cleanup(self)
     
     self:cleanupTweenMove()
+    
+    if self._timerVisible ~= nil then
+        timer.cancel(self._timerVisible)
+        self._timerVisible = nil
+    end
     
     Runtime:removeEventListener("touch", self)
     

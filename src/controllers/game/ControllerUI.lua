@@ -9,6 +9,11 @@ ControllerUI = classWithSuper(Controller, 'ControllerUI')
 -- Properties
 --
 
+function ControllerUI.controllerProgress(self)
+    
+    return self._controllerProgress
+    
+end
 
 --
 --Events

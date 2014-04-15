@@ -77,6 +77,7 @@ function ViewUI.placeViews(self)
     
     self._viewProgress:sourceView().xScale = self._viewProgress:sourceView().xScale * scaleWidth
     self._viewProgress:sourceView().yScale = self._viewProgress:sourceView().xScale
+    self._viewProgress._scaleWidth = scaleWidth
     
     self._viewProgress:sourceView().x = display.contentCenterX
     self._viewProgress:sourceView().y = application.margin_bottom - self._viewProgress:realHeight() / 2
