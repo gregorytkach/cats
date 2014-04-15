@@ -38,25 +38,22 @@ function ManagerSounds.init(self)
 end
 
 function ManagerSounds._loadSounds(self, stateType)
-    --todo:implement
     
-    --    if(stateType == EStateType.EST_GAME)then
-    --        self:_loadSounds(EStateType.EST_MAIN)
-    
-    --    else
-    --        self:_loadSoundsButtons()
-    --    end
+--    if(stateType == EStateType.EST_GAME)then
+--        self:_loadSoundsGame()
+--    else
+--        self:_loadSoundsButtons()
+--    end
 end
 
 function ManagerSounds._loadSoundsGame(self)
-    self:_loadSoundsLobby()
     
     --bonuses
-    for i = 0, 4, 1 do
-        local soundName = string.format("assets/sounds/bonuses/bonus%i.mp3", i)
+--    for i = 0, 4, 1 do
+--        local soundName = string.format("assets/sounds/bonuses/bonus%i.mp3", i)
         
-        self._audioHandlers[ESoundType["EST_BONUS"]..i] = audio.loadStream(soundName)
-    end
+--        self._audioHandlers[ESoundType["EST_BONUS"]..i] = audio.loadStream(soundName)
+--    end
     
 end
 
