@@ -141,6 +141,11 @@ end
 
 function StateGame.cleanup(self)
     
+    self._controllerState:cleanup()
+    self._controllerState = nil
+    
+    self._controllerUI:cleanup()
+    self._controllerUI = nil
     
     StateBase.cleanup(self)
 end

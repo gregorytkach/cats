@@ -65,6 +65,7 @@ function ControllerCat.touch(self, event)
     
     local group = self._view:getGroup()
     
+    assert(event ~= nil)
     local eventGroup = 
     {
         x = event.x - group.x,
@@ -264,5 +265,6 @@ function ControllerCat.cleanup(self)
     
     self._view:cleanup()
     Controller.cleanup(self)
+    
     
 end

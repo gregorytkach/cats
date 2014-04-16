@@ -296,6 +296,14 @@ function ControllerGrid.cleanup(self)
     for i = #self._bottomRow, 1, -1 do
         table.remove(self._bottomRow, i)
     end
+    
+    for i = #self._controllersCats, 1, -1 do
+            
+       local controllerCat = self._controllersCats[i]
+       controllerCat:cleanup()
+       table.remove(self._controllersCats, i)
+        
+    end
       
     self._startBonusDogCell = nil
     self._stopBonusDogCell  = nil

@@ -17,6 +17,7 @@ end
 --
 --Events
 --
+
 function ControllerStateGame.onViewClicked(self, target, event)
     local result = Controller.onViewClicked(self, target, event)
     
@@ -26,9 +27,11 @@ function ControllerStateGame.onViewClicked(self, target, event)
     
     return result
 end
+
 --
 -- Methods
 --
+
 function ControllerStateGame.init(self)
     
     local paramsView = 
@@ -52,6 +55,9 @@ end
 
 
 function ControllerStateGame.cleanup(self)
+    
+    self._controllerGrid:cleanup()
+    self._controllerGrid = nil
     
     self._view:cleanup()
     self._view = nil
